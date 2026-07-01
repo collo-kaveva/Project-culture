@@ -1,0 +1,160 @@
+<svg id="kenya-svg-map" viewBox="0 0 800 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Interactive map of Kenya's 47 counties">
+  <defs>
+    <filter id="county-glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="county-shadow">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="rgba(0,0,0,0.3)"/>
+    </filter>
+    <clipPath id="kenya-clip">
+      <path d="M 46.62,38.45 L 215.79,65.35 L 366.17,105.7 L 516.54,96.73 L 704.51,87.76 L 737.41,208.81 L 732.71,334.34 L 728.01,459.86 L 737.41,531.59 L 760.9,589.87 L 690.41,625.74 L 643.42,661.6 L 605.83,724.37 L 577.63,796.1 L 549.44,836.45 L 530.64,861.55 L 441.35,791.61 L 356.77,715.4 L 215.79,621.26 L 93.61,540.56 L 46.62,482.28 L 39.1,437.45 L 51.32,388.13 L 60.71,325.37 L 70.11,253.64 L 79.51,181.91 L 93.61,119.15 L 107.71,74.31 L 46.62,38.45 Z"/>
+    </clipPath>
+  </defs>
+
+  <g id="counties-group" clip-path="url(#kenya-clip)">
+    <path id="county-1" class="county" data-id="1" data-name="Mombasa"
+      d="M 507.31,777.94 L 570.12,806.85 L 577.63,796.1 L 585.22,776.8 L 520.24,749.52 L 507.31,777.94 Z"
+      fill="#2E7D32" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-2" class="county" data-id="2" data-name="Kwale"
+      d="M 507.31,777.94 L 476.4,819.07 L 530.64,861.55 L 570.12,806.85 L 507.31,777.94 Z"
+      fill="#1976D2" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-3" class="county" data-id="3" data-name="Kilifi"
+      d="M 520.24,749.52 L 585.22,776.8 L 605.83,724.37 L 627.75,687.77 L 594.02,664.51 L 532.29,654.99 L 520.24,749.52 Z"
+      fill="#FFB300" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-4" class="county" data-id="4" data-name="Tana River"
+      d="M 532.29,654.99 L 594.02,664.51 L 731.76,488.53 L 730.1,475.84 L 519.39,558.47 L 516.12,618.52 L 526.94,649.85 L 532.29,654.99 Z"
+      fill="#D81B60" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-5" class="county" data-id="5" data-name="Lamu"
+      d="M 594.02,664.51 L 627.75,687.77 L 643.42,661.6 L 690.41,625.74 L 760.9,589.87 L 737.41,531.59 L 731.76,488.53 L 594.02,664.51 Z"
+      fill="#6A1B9A" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-6" class="county" data-id="6" data-name="Taita-Taveta"
+      d="M 507.31,777.94 L 520.24,749.52 L 532.29,654.99 L 526.94,649.85 L 365.04,722.86 L 441.35,791.61 L 476.4,819.07 L 507.31,777.94 Z"
+      fill="#00897B" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-7" class="county" data-id="7" data-name="Garissa"
+      d="M 498.16,398.43 L 482.69,463.21 L 481.33,487.31 L 519.39,558.47 L 730.1,475.84 L 728.01,459.86 L 729.87,410.03 L 509.9,366.94 L 498.16,398.43 Z"
+      fill="#F57F17" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-8" class="county" data-id="8" data-name="Wajir"
+      d="M 509.9,366.94 L 729.87,410.03 L 736.22,240.5 L 549.89,144.15 L 496.28,341.57 L 509.9,366.94 Z"
+      fill="#558B2F" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-9" class="county" data-id="9" data-name="Mandera"
+      d="M 549.89,144.15 L 736.22,240.5 L 737.41,208.81 L 704.51,87.76 L 530.09,96.08 L 549.89,144.15 Z"
+      fill="#5D4037" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-10" class="county" data-id="10" data-name="Marsabit"
+      d="M 417.72,324.65 L 496.28,341.57 L 549.89,144.15 L 530.09,96.08 L 366.17,105.7 L 339.99,98.67 L 300.33,225.6 L 417.72,324.65 Z"
+      fill="#1565C0" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-11" class="county" data-id="11" data-name="Isiolo"
+      d="M 357.67,430.54 L 498.16,398.43 L 509.9,366.94 L 496.28,341.57 L 417.72,324.65 L 336.97,392.57 L 357.67,430.54 Z"
+      fill="#C62828" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-12" class="county" data-id="12" data-name="Meru"
+      d="M 358.87,452.18 L 482.69,463.21 L 498.16,398.43 L 357.67,430.54 L 358.87,452.18 Z"
+      fill="#4527A0" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-13" class="county" data-id="13" data-name="Tharaka-Nithi"
+      d="M 366.82,470.08 L 416.03,513.8 L 481.33,487.31 L 482.69,463.21 L 358.87,452.18 L 366.82,470.08 Z"
+      fill="#00695C" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-14" class="county" data-id="14" data-name="Embu"
+      d="M 416.03,513.8 L 366.82,470.08 L 359.56,502.43 L 381.32,537.54 L 382.32,537.74 L 416.03,513.8 Z"
+      fill="#EF6C00" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-15" class="county" data-id="15" data-name="Kitui"
+      d="M 382.32,537.74 L 394.39,600.86 L 516.12,618.52 L 519.39,558.47 L 481.33,487.31 L 416.03,513.8 L 382.32,537.74 Z"
+      fill="#283593" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-16" class="county" data-id="16" data-name="Machakos"
+      d="M 357.32,634.03 L 394.39,600.86 L 382.32,537.74 L 347.9,542.43 L 342.58,547.37 L 324.63,584.21 L 357.32,634.03 Z"
+      fill="#AD1457" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-17" class="county" data-id="17" data-name="Makueni"
+      d="M 334.46,700.5 L 356.77,715.4 L 365.04,722.86 L 526.94,649.85 L 516.12,618.52 L 394.39,600.86 L 357.32,634.03 L 334.46,700.5 Z"
+      fill="#2E7D32" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-18" class="county" data-id="18" data-name="Nyandarua"
+      d="M 248.85,508.64 L 267.53,535.45 L 312.61,505.72 L 293.58,457.83 L 282.53,449.43 L 248.85,508.64 Z"
+      fill="#0277BD" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-19" class="county" data-id="19" data-name="Nyeri"
+      d="M 312.61,505.72 L 314.51,506.11 L 337.81,489.98 L 343.84,461.53 L 293.58,457.83 L 312.61,505.72 Z"
+      fill="#F9A825" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-20" class="county" data-id="20" data-name="Kirinyaga"
+      d="M 337.81,489.98 L 359.56,502.43 L 366.82,470.08 L 358.8,452.12 L 343.84,461.53 L 337.81,489.98 Z"
+      fill="#6D4C41" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-21" class="county" data-id="21" data-name="Murang'a"
+      d="M 347.9,542.43 L 381.32,537.54 L 359.56,502.43 L 337.81,489.98 L 314.51,506.11 L 347.9,542.43 Z"
+      fill="#2E7D32" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-22" class="county" data-id="22" data-name="Kiambu"
+      d="M 267.53,535.45 L 267.95,544.28 L 342.58,547.37 L 347.9,542.43 L 314.51,506.11 L 312.61,505.72 L 267.53,535.45 Z"
+      fill="#1976D2" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-23" class="county" data-id="23" data-name="Turkana"
+      d="M 258.91,255.42 L 300.33,225.6 L 339.99,98.67 L 215.79,65.35 L 46.62,38.45 L 107.71,74.31 L 93.61,119.15 L 78.56,189.15 L 258.91,255.42 Z"
+      fill="#FFB300" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-24" class="county" data-id="24" data-name="West Pokot"
+      d="M 190.97,325.35 L 242.84,304.47 L 258.91,255.42 L 78.56,189.15 L 63.32,305.49 L 190.97,325.35 Z"
+      fill="#D81B60" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-25" class="county" data-id="25" data-name="Samburu"
+      d="M 242.84,304.47 L 298.41,392.23 L 336.97,392.57 L 417.72,324.65 L 300.33,225.6 L 258.91,255.42 L 242.84,304.47 Z"
+      fill="#6A1B9A" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-26" class="county" data-id="26" data-name="Trans-Nzoia"
+      d="M 133.16,384.28 L 163.99,367.19 L 190.97,325.35 L 63.32,305.49 L 62.5,311.72 L 133.16,384.28 Z"
+      fill="#00897B" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-27" class="county" data-id="27" data-name="Uasin Gishu"
+      d="M 201.91,434.4 L 202.87,433.4 L 203.02,429.21 L 163.99,367.19 L 133.16,384.28 L 133.04,386.32 L 138.38,398.54 L 201.91,434.4 Z"
+      fill="#F57F17" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-28" class="county" data-id="28" data-name="Elgeyo-Marakwet"
+      d="M 190.97,325.35 L 163.99,367.19 L 203.02,429.21 L 241.59,305.49 L 190.97,325.35 Z"
+      fill="#558B2F" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-29" class="county" data-id="29" data-name="Nandi"
+      d="M 135.25,438.89 L 147.56,453.17 L 201.84,434.4 L 138.38,398.54 L 131.82,428.02 L 135.25,438.89 Z"
+      fill="#5D4037" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-30" class="county" data-id="30" data-name="Baringo"
+      d="M 241.59,305.49 L 203.02,429.21 L 202.87,433.4 L 277.27,433.6 L 298.41,392.23 L 242.84,304.47 L 241.59,305.49 Z"
+      fill="#1565C0" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-31" class="county" data-id="31" data-name="Laikipia"
+      d="M 293.58,457.83 L 343.84,461.53 L 358.8,452.12 L 357.67,430.54 L 336.97,392.57 L 298.41,392.23 L 277.27,433.6 L 282.53,449.43 L 293.58,457.83 Z"
+      fill="#C62828" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-32" class="county" data-id="32" data-name="Nakuru"
+      d="M 201.91,434.4 L 206.04,488.22 L 212.26,498.28 L 248.85,508.64 L 282.53,449.43 L 277.27,433.6 L 202.87,433.4 L 201.91,434.4 Z"
+      fill="#4527A0" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-33" class="county" data-id="33" data-name="Narok"
+      d="M 260.63,578.72 L 267.95,544.28 L 267.53,535.45 L 248.85,508.64 L 212.26,498.28 L 164.16,587.15 L 222.41,625.68 L 260.63,578.72 Z"
+      fill="#00695C" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-34" class="county" data-id="34" data-name="Kajiado"
+      d="M 357.32,634.03 L 324.63,584.21 L 260.63,578.72 L 222.41,625.68 L 334.46,700.5 L 357.32,634.03 Z"
+      fill="#EF6C00" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-35" class="county" data-id="35" data-name="Kericho"
+      d="M 201.84,434.4 L 147.56,453.17 L 141.34,466.08 L 157.22,495.26 L 206.04,488.22 L 201.84,434.4 Z"
+      fill="#283593" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-36" class="county" data-id="36" data-name="Bomet"
+      d="M 139.14,547.79 L 148.03,576.5 L 164.16,587.15 L 212.26,498.28 L 206.04,488.22 L 157.22,495.26 L 143.14,523.41 L 139.14,547.79 Z"
+      fill="#AD1457" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-37" class="county" data-id="37" data-name="Kakamega"
+      d="M 93.7,422.58 L 131.82,428.02 L 138.38,398.54 L 133.04,386.32 L 90.89,416.42 L 93.7,422.58 Z"
+      fill="#2E7D32" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-38" class="county" data-id="38" data-name="Vihiga"
+      d="M 94.65,447.79 L 135.25,438.89 L 131.82,428.02 L 93.7,422.58 L 94.65,447.79 Z"
+      fill="#0277BD" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-39" class="county" data-id="39" data-name="Bungoma"
+      d="M 90.89,416.42 L 133.04,386.32 L 133.16,384.28 L 62.5,311.72 L 61.49,319.47 L 81.51,411.1 L 90.89,416.42 Z"
+      fill="#F9A825" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-40" class="county" data-id="40" data-name="Busia"
+      d="M 81.51,411.1 L 61.49,319.47 L 51.32,388.13 L 40.97,429.87 L 81.51,411.1 Z"
+      fill="#6D4C41" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-41" class="county" data-id="41" data-name="Siaya"
+      d="M 90.66,459.92 L 94.65,447.79 L 93.7,422.58 L 90.89,416.42 L 81.51,411.1 L 40.97,429.87 L 39.1,437.45 L 45.18,473.69 L 90.66,459.92 Z"
+      fill="#2E7D32" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-42" class="county" data-id="42" data-name="Kisumu"
+      d="M 90.66,459.92 L 113.24,477.06 L 141.34,466.08 L 147.56,453.17 L 135.25,438.89 L 94.65,447.79 L 90.66,459.92 Z"
+      fill="#1976D2" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-43" class="county" data-id="43" data-name="Homa Bay"
+      d="M 45.18,473.69 L 46.62,482.28 L 71.89,513.63 L 95.84,512.88 L 113.24,477.06 L 90.66,459.92 L 45.18,473.69 Z"
+      fill="#FFB300" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-44" class="county" data-id="44" data-name="Migori"
+      d="M 139.14,547.79 L 95.84,512.88 L 71.89,513.63 L 93.61,540.56 L 148.03,576.5 L 139.14,547.79 Z"
+      fill="#D81B60" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-45" class="county" data-id="45" data-name="Kisii"
+      d="M 143.14,523.41 L 113.22,477.34 L 95.84,512.88 L 139.14,547.79 L 143.14,523.41 Z"
+      fill="#6A1B9A" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-46" class="county" data-id="46" data-name="Nyamira"
+      d="M 141.34,466.08 L 113.22,477.34 L 143.14,523.41 L 157.22,495.26 L 141.34,466.08 Z"
+      fill="#00897B" stroke="#fff" stroke-width="1.2"/>
+    <path id="county-47" class="county" data-id="47" data-name="Nairobi"
+      d="M 260.63,578.72 L 324.63,584.21 L 342.58,547.37 L 267.95,544.28 L 260.63,578.72 Z"
+      fill="#F57F17" stroke="#fff" stroke-width="1.2"/>
+  </g>
+  <path id="kenya-outline" d="M 46.62,38.45 L 215.79,65.35 L 366.17,105.7 L 516.54,96.73 L 704.51,87.76 L 737.41,208.81 L 732.71,334.34 L 728.01,459.86 L 737.41,531.59 L 760.9,589.87 L 690.41,625.74 L 643.42,661.6 L 605.83,724.37 L 577.63,796.1 L 549.44,836.45 L 530.64,861.55 L 441.35,791.61 L 356.77,715.4 L 215.79,621.26 L 93.61,540.56 L 46.62,482.28 L 39.1,437.45 L 51.32,388.13 L 60.71,325.37 L 70.11,253.64 L 79.51,181.91 L 93.61,119.15 L 107.71,74.31 L 46.62,38.45 Z" fill="none" stroke="#1A1D23" stroke-width="2.2" stroke-linejoin="round" pointer-events="none" opacity="0.55"/>
+  <!-- Labels intentionally omitted from the SVG; rendered as HTML tooltips on hover/click -->
+</svg>

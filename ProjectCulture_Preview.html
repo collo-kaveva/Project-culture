@@ -1,0 +1,3579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Project Culture — Explore Kenya's 47 Counties</title>
+<meta name="description" content="An interactive explorer showcasing the beauty, culture, geography, history, and diversity of Kenya's 47 counties.">
+<style>
+/* css/reset.css — Normalize base styles */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; -webkit-text-size-adjust: 100%; }
+body { line-height: 1.6; -webkit-font-smoothing: antialiased; }
+img, svg { display: block; max-width: 100%; }
+button, input, select, textarea { font: inherit; border: none; outline: none; background: none; }
+button { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; }
+h1, h2, h3, h4, h5, h6 { font-weight: normal; }
+/* css/variables.css — Design tokens for Project Culture */
+:root {
+  /* === Brand Colors === */
+  --clr-primary:       #2E7D32;
+  --clr-primary-light: #4CAF50;
+  --clr-primary-dark:  #1B5E20;
+  --clr-accent-blue:   #1976D2;
+  --clr-accent-gold:   #FFB300;
+  --clr-accent-rose:   #D81B60;
+  --clr-accent-purple: #6A1B9A;
+  --clr-accent-teal:   #00695C;
+
+  /* === Neutrals === */
+  --clr-bg:            #F5F7FA;
+  --clr-bg-secondary:  #EEF2F7;
+  --clr-surface:       rgba(255,255,255,0.72);
+  --clr-surface-solid: #FFFFFF;
+  --clr-border:        rgba(0,0,0,0.08);
+  --clr-border-light:  rgba(255,255,255,0.25);
+
+  /* === Text === */
+  --clr-text-primary:   #1A1D23;
+  --clr-text-secondary: #5A6272;
+  --clr-text-muted:     #9BA3B0;
+  --clr-text-inverse:   #FFFFFF;
+  --clr-text-on-dark:   rgba(255,255,255,0.90);
+
+  /* === Glassmorphism === */
+  --glass-bg:     rgba(255, 255, 255, 0.65);
+  --glass-bg-dark: rgba(20, 30, 48, 0.72);
+  --glass-blur:   blur(18px) saturate(1.4);
+  --glass-border: 1px solid rgba(255,255,255,0.3);
+  --glass-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
+
+  /* === Shadows === */
+  --shadow-xs:  0 1px 3px rgba(0,0,0,0.08);
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.10);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.12);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,0.16);
+  --shadow-xl:  0 16px 48px rgba(0,0,0,0.20);
+  --shadow-float: 0 20px 60px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.10);
+
+  /* === Border Radius === */
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  20px;
+  --radius-xl:  28px;
+  --radius-pill: 9999px;
+
+  /* === Spacing === */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* === Typography === */
+  --font-display: 'Playfair Display', 'Georgia', serif;
+  --font-body:    'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+
+  /* === Type Scale === */
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
+  --text-5xl:  3rem;
+  --text-6xl:  3.75rem;
+  --text-7xl:  4.5rem;
+
+  /* === Transitions === */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast:    150ms;
+  --dur-base:    250ms;
+  --dur-slow:    400ms;
+  --dur-slower:  600ms;
+
+  /* === Z-Index Layers === */
+  --z-base:    1;
+  --z-raised:  10;
+  --z-float:   100;
+  --z-overlay: 200;
+  --z-modal:   300;
+  --z-toast:   400;
+  --z-tooltip: 500;
+
+  /* === Panel === */
+  --panel-width: 420px;
+}
+
+/* === Dark Mode === */
+[data-theme="dark"] {
+  --clr-bg:            #0D1117;
+  --clr-bg-secondary:  #161B22;
+  --clr-surface:       rgba(22, 27, 34, 0.80);
+  --clr-surface-solid: #161B22;
+  --clr-border:        rgba(255,255,255,0.10);
+  --clr-text-primary:  #E6EDF3;
+  --clr-text-secondary:#8B949E;
+  --clr-text-muted:    #484F58;
+  --glass-bg:          rgba(22, 27, 34, 0.75);
+  --glass-bg-dark:     rgba(10, 12, 16, 0.85);
+  --glass-border:      1px solid rgba(255,255,255,0.10);
+}
+/* css/layout.css — Page structure and layout */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* === Root Layout === */
+body {
+  font-family: var(--font-body);
+  background: var(--clr-bg);
+  color: var(--clr-text-primary);
+  overflow-x: hidden;
+  transition: background var(--dur-slow) var(--ease-out),
+              color var(--dur-slow) var(--ease-out);
+}
+
+/* === Background Gradient === */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 10%, rgba(46,125,50,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(25,118,210,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 50% 50%, rgba(255,179,0,0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* === App Container === */
+#app {
+  position: relative;
+  min-height: 100vh;
+  z-index: 1;
+}
+
+/* === Hero Section === */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-12) var(--space-6);
+  position: relative;
+}
+
+.hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: rgba(46,125,50,0.10);
+  border: 1px solid rgba(46,125,50,0.25);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--clr-primary);
+  margin-bottom: var(--space-6);
+}
+
+.hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-5xl), 8vw, var(--text-7xl));
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--clr-text-primary) 0%, var(--clr-primary) 50%, var(--clr-accent-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-4);
+}
+
+.hero__subtitle {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-xl), 3vw, var(--text-3xl));
+  font-weight: 400;
+  color: var(--clr-text-secondary);
+  font-style: italic;
+  margin-bottom: var(--space-6);
+}
+
+.hero__description {
+  max-width: 520px;
+  font-size: var(--text-lg);
+  color: var(--clr-text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--space-10);
+}
+
+.hero__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* === Map Section === */
+#map-section {
+  min-height: 100vh;
+  padding: var(--space-12) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  position: relative;
+}
+
+.map-section__header {
+  text-align: center;
+  max-width: 600px;
+}
+
+.section-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--clr-primary);
+  margin-bottom: var(--space-3);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(var(--text-3xl), 4vw, var(--text-5xl));
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--clr-text-primary);
+  margin-bottom: var(--space-4);
+}
+
+.section-subtitle {
+  font-size: var(--text-lg);
+  color: var(--clr-text-secondary);
+  line-height: 1.6;
+}
+
+/* === Map Stage === */
+#map-stage {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+}
+
+#map-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 8/9;
+  cursor: grab;
+  user-select: none;
+}
+
+#map-container:active { cursor: grabbing; }
+
+#kenya-svg-map {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 20px 60px rgba(0,0,0,0.15));
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+/* === Sidebar Panel === */
+#info-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: var(--panel-width);
+  height: 100vh;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-left: var(--glass-border);
+  box-shadow: var(--shadow-xl);
+  z-index: var(--z-modal);
+  transform: translateX(100%);
+  transition: transform var(--dur-slower) var(--ease-out);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#info-panel.is-open {
+  transform: translateX(0);
+}
+
+/* === Stats Bar === */
+#stats-bar {
+  width: 100%;
+  max-width: 900px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+/* === Search Bar Wrapper === */
+#search-wrapper {
+  width: 100%;
+  max-width: 520px;
+  position: relative;
+  z-index: var(--z-float);
+}
+
+/* === Controls Bar === */
+#map-controls {
+  position: absolute;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  z-index: var(--z-raised);
+}
+
+/* === Overlay Dimmer === */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: var(--z-overlay);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-slow) var(--ease-out);
+  backdrop-filter: blur(2px);
+}
+
+#overlay.is-visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* === Navbar === */
+#navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  padding: 0 var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: var(--z-float);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: var(--glass-border);
+  transition: all var(--dur-slow) var(--ease-out);
+}
+
+.navbar__brand {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--clr-primary);
+  letter-spacing: -0.01em;
+}
+
+.navbar__brand span {
+  color: var(--clr-accent-blue);
+}
+
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* === Quiz Section === */
+#quiz-section {
+  min-height: 100vh;
+  padding: var(--space-16) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+/* === Footer === */
+footer {
+  padding: var(--space-10) var(--space-6);
+  text-align: center;
+  border-top: var(--glass-border);
+  color: var(--clr-text-muted);
+  font-size: var(--text-sm);
+}
+
+/* === Scroll to top === */
+#scroll-top {
+  position: fixed;
+  bottom: var(--space-8);
+  right: var(--space-8);
+  z-index: var(--z-float);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+
+#scroll-top.is-visible {
+  opacity: 1;
+  pointer-events: all;
+}
+/* css/components.css — UI components */
+
+/* === Buttons === */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all var(--dur-base) var(--ease-spring);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0);
+  transition: background var(--dur-fast);
+}
+
+.btn:hover::after { background: rgba(255,255,255,0.12); }
+.btn:active { transform: scale(0.97); }
+
+.btn--primary {
+  background: linear-gradient(135deg, var(--clr-primary) 0%, var(--clr-primary-light) 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(46,125,50,0.35);
+}
+
+.btn--primary:hover {
+  box-shadow: 0 6px 24px rgba(46,125,50,0.45);
+  transform: translateY(-1px);
+}
+
+.btn--secondary {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  color: var(--clr-text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn--secondary:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn--icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: var(--radius-md);
+  justify-content: center;
+}
+
+.btn--icon-lg {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: var(--radius-lg);
+  justify-content: center;
+  font-size: var(--text-xl);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--clr-text-secondary);
+}
+
+.btn--ghost:hover {
+  background: var(--clr-bg-secondary);
+  color: var(--clr-text-primary);
+}
+
+/* === Glass Card === */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow);
+}
+
+/* === Stat Card === */
+.stat-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow);
+  padding: var(--space-5) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  transition: transform var(--dur-base) var(--ease-spring),
+              box-shadow var(--dur-base) var(--ease-out);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.stat-card__icon {
+  font-size: 1.5rem;
+  margin-bottom: var(--space-1);
+}
+
+.stat-card__value {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--clr-text-primary);
+  line-height: 1;
+}
+
+.stat-card__label {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--clr-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* === Search Input === */
+.search-box {
+  position: relative;
+  width: 100%;
+}
+
+.search-box__input {
+  width: 100%;
+  padding: var(--space-4) var(--space-6) var(--space-4) 52px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-md);
+  font-size: var(--text-base);
+  color: var(--clr-text-primary);
+  transition: all var(--dur-base) var(--ease-out);
+}
+
+.search-box__input::placeholder { color: var(--clr-text-muted); }
+
+.search-box__input:focus {
+  outline: none;
+  box-shadow: var(--shadow-lg), 0 0 0 3px rgba(46,125,50,0.20);
+  border-color: rgba(46,125,50,0.4);
+}
+
+.search-box__icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--clr-text-muted);
+  font-size: 1.1rem;
+  pointer-events: none;
+  transition: color var(--dur-fast);
+}
+
+.search-box__input:focus ~ .search-box__icon {
+  color: var(--clr-primary);
+}
+
+.search-box__clear {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--clr-bg-secondary);
+  color: var(--clr-text-muted);
+  opacity: 0;
+  transition: opacity var(--dur-fast);
+  font-size: var(--text-sm);
+}
+
+.search-box__input:not(:placeholder-shown) ~ .search-box__clear { opacity: 1; }
+
+/* === Search Dropdown === */
+#search-dropdown {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  left: 0;
+  right: 0;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  z-index: var(--z-tooltip);
+  max-height: 380px;
+  overflow-y: auto;
+  display: none;
+}
+
+#search-dropdown.is-open { display: block; }
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  cursor: pointer;
+  transition: background var(--dur-fast);
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover,
+.search-result-item.is-focused {
+  background: rgba(46,125,50,0.08);
+}
+
+.search-result-item__number {
+  width: 28px;
+  height: 28px;
+  background: var(--clr-primary);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.search-result-item__info { flex: 1; }
+.search-result-item__name {
+  font-weight: 600;
+  font-size: var(--text-sm);
+  color: var(--clr-text-primary);
+}
+.search-result-item__capital {
+  font-size: var(--text-xs);
+  color: var(--clr-text-muted);
+}
+
+.search-dropdown-section {
+  padding: var(--space-2) var(--space-5) var(--space-1);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--clr-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* === Tooltip === */
+#map-tooltip {
+  position: fixed;
+  background: var(--glass-bg-dark);
+  color: var(--clr-text-inverse);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  pointer-events: none;
+  z-index: var(--z-tooltip);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--dur-fast), transform var(--dur-fast);
+  white-space: nowrap;
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+#map-tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === Info Panel Contents === */
+.panel-header {
+  position: relative;
+  padding: var(--space-8) var(--space-6) var(--space-4);
+  background: linear-gradient(135deg, var(--clr-primary-dark) 0%, var(--clr-primary) 60%, var(--clr-primary-light) 100%);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.panel-header__close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  transition: background var(--dur-fast);
+  font-size: 1.1rem;
+}
+
+.panel-header__close:hover { background: rgba(255,255,255,0.25); }
+
+.panel-header__number {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: var(--space-2);
+}
+
+.panel-header__name {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: var(--space-2);
+}
+
+.panel-header__capital {
+  opacity: 0.85;
+  font-size: var(--text-base);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.panel-meta-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+
+.panel-body {
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  flex: 1;
+}
+
+.panel-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.panel-section__title {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--clr-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.panel-section__content {
+  font-size: var(--text-sm);
+  color: var(--clr-text-secondary);
+  line-height: 1.7;
+}
+
+.panel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.panel-grid-item {
+  background: var(--clr-bg-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+}
+
+.panel-grid-item__label {
+  font-size: var(--text-xs);
+  color: var(--clr-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+
+.panel-grid-item__value {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--clr-text-primary);
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tag {
+  padding: 4px 10px;
+  background: rgba(46,125,50,0.10);
+  border: 1px solid rgba(46,125,50,0.20);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--clr-primary-dark);
+}
+
+[data-theme="dark"] .tag {
+  background: rgba(76,175,80,0.15);
+  color: var(--clr-primary-light);
+}
+
+.fun-fact-box {
+  background: linear-gradient(135deg, rgba(255,179,0,0.08) 0%, rgba(255,143,0,0.06) 100%);
+  border: 1px solid rgba(255,179,0,0.25);
+  border-left: 3px solid var(--clr-accent-gold);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  color: var(--clr-text-secondary);
+}
+
+.fun-fact-box strong {
+  display: block;
+  color: #B8860B;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-2);
+}
+
+.external-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.external-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--clr-bg-secondary);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--clr-text-secondary);
+  transition: all var(--dur-fast);
+  border: 1px solid var(--clr-border);
+}
+
+.external-link:hover {
+  background: var(--clr-accent-blue);
+  color: #fff;
+  border-color: var(--clr-accent-blue);
+}
+
+/* === Nearby Counties === */
+.nearby-county-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: var(--clr-bg-secondary);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--dur-fast);
+}
+
+.nearby-county-chip:hover {
+  background: var(--clr-primary);
+  color: #fff;
+  border-color: var(--clr-primary);
+}
+
+/* === Map Controls === */
+.map-ctrl-btn {
+  width: 40px;
+  height: 40px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--clr-text-secondary);
+  transition: all var(--dur-fast);
+}
+
+.map-ctrl-btn:hover {
+  background: var(--clr-primary);
+  color: #fff;
+  box-shadow: var(--shadow-md);
+}
+
+/* === Toast === */
+#toast-container {
+  position: fixed;
+  bottom: var(--space-6);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  pointer-events: none;
+}
+
+.toast {
+  background: var(--glass-bg-dark);
+  color: #fff;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  box-shadow: var(--shadow-xl);
+  backdrop-filter: blur(16px);
+  animation: toastIn var(--dur-slow) var(--ease-spring) forwards;
+  white-space: nowrap;
+}
+
+.toast.toast--out {
+  animation: toastOut var(--dur-slow) var(--ease-out) forwards;
+}
+
+/* === Quiz === */
+.quiz-card {
+  width: 100%;
+  max-width: 640px;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  padding: var(--space-10);
+  text-align: center;
+}
+
+.quiz-question {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  color: var(--clr-text-primary);
+  line-height: 1.3;
+  margin-bottom: var(--space-8);
+}
+
+.quiz-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.quiz-option {
+  padding: var(--space-4);
+  background: var(--clr-bg-secondary);
+  border: 2px solid var(--clr-border);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--dur-base) var(--ease-spring);
+  text-align: center;
+}
+
+.quiz-option:hover:not(:disabled) {
+  border-color: var(--clr-primary);
+  background: rgba(46,125,50,0.08);
+}
+
+.quiz-option.is-correct {
+  background: rgba(46,125,50,0.15);
+  border-color: var(--clr-primary);
+  color: var(--clr-primary-dark);
+}
+
+.quiz-option.is-wrong {
+  background: rgba(211,47,47,0.10);
+  border-color: #D32F2F;
+  color: #C62828;
+}
+
+.quiz-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.quiz-progress__bar {
+  flex: 1;
+  height: 6px;
+  background: var(--clr-bg-secondary);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.quiz-progress__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--clr-primary) 0%, var(--clr-primary-light) 100%);
+  border-radius: var(--radius-pill);
+  transition: width var(--dur-slow) var(--ease-out);
+}
+
+/* === Favorites Bar === */
+#favorites-bar {
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: center;
+  min-height: 40px;
+}
+
+/* === County Highlight === */
+.county.is-hovered {
+  filter: brightness(1.15) saturate(1.2) drop-shadow(0 0 8px rgba(0,0,0,0.3));
+  transform-origin: center;
+}
+
+.county.is-active {
+  filter: brightness(1.25) saturate(1.3) drop-shadow(0 0 16px rgba(0,0,0,0.4));
+}
+
+.county.is-dimmed {
+  opacity: 0.35;
+  filter: saturate(0.4);
+}
+
+.county.is-searched {
+  filter: brightness(1.3) drop-shadow(0 0 12px rgba(255,179,0,0.8));
+  stroke: var(--clr-accent-gold) !important;
+  stroke-width: 3 !important;
+}
+
+/* === Loading Skeleton === */
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--clr-bg-secondary) 25%,
+    rgba(255,255,255,0.5) 50%,
+    var(--clr-bg-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+/* === Legend === */
+#map-legend {
+  position: absolute;
+  bottom: var(--space-4);
+  left: var(--space-4);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: var(--shadow-md);
+  font-size: var(--text-xs);
+  color: var(--clr-text-secondary);
+  z-index: var(--z-raised);
+}
+
+.legend__title {
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+  color: var(--clr-text-primary);
+}
+
+.legend__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-1);
+}
+
+.legend__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* === Keyboard Shortcuts === */
+#shortcuts-modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+
+#shortcuts-modal.is-open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.shortcuts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.shortcut-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+}
+
+kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  background: var(--clr-bg-secondary);
+  border: 1px solid var(--clr-border);
+  border-bottom: 2px solid var(--clr-text-muted);
+  border-radius: 5px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--clr-text-secondary);
+  white-space: nowrap;
+}
+/* css/animations.css — All keyframes and animation utilities */
+
+/* === Float Animation === */
+@keyframes float {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  20%  { transform: translate(4px, -8px) rotate(0.3deg); }
+  40%  { transform: translate(-5px, -14px) rotate(-0.2deg); }
+  60%  { transform: translate(3px, -6px) rotate(0.15deg); }
+  80%  { transform: translate(-3px, -10px) rotate(-0.1deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+#map-container {
+  animation: float 10s ease-in-out infinite;
+}
+
+#map-container:hover {
+  animation-play-state: paused;
+}
+
+/* === Fade In === */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* === Fade Up === */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* === Fade Down === */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* === Scale In === */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* === Slide In Right === */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* === Pop === */
+@keyframes pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.08); }
+  70%  { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+/* === Ripple === */
+@keyframes ripple {
+  0%   { transform: scale(0); opacity: 0.6; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+/* === Glow Pulse === */
+@keyframes glowPulse {
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(46,125,50,0.5)); }
+  50%       { filter: drop-shadow(0 0 18px rgba(46,125,50,0.9)); }
+}
+
+/* === Shimmer === */
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* === Toast In/Out === */
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+
+/* === Hero Entrance === */
+@keyframes heroTitle {
+  from { opacity: 0; transform: translateY(32px) skewY(1deg); }
+  to   { opacity: 1; transform: translateY(0) skewY(0); }
+}
+
+@keyframes heroSubtitle {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* === Bounce === */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+/* === Rotate === */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* === Animated county hover scale === */
+.county {
+  transition:
+    transform var(--dur-base) var(--ease-spring),
+    filter var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out),
+    stroke-width var(--dur-fast),
+    stroke var(--dur-fast);
+  transform-box: fill-box;
+  transform-origin: center;
+  cursor: pointer;
+  will-change: transform, filter, opacity;
+}
+
+.county:hover {
+  transform: scale(1.06) translateY(-2px);
+  filter: brightness(1.18) saturate(1.25) drop-shadow(0 4px 12px rgba(0,0,0,0.35));
+}
+
+.county.is-active {
+  transform: scale(1.10) translateY(-5px);
+  animation: glowPulse 2s ease-in-out infinite;
+  z-index: 10;
+}
+
+/* === Entrance Animations === */
+.anim-fade-up {
+  animation: fadeUp 0.6s var(--ease-out) both;
+}
+
+.anim-fade-in {
+  animation: fadeIn 0.5s var(--ease-out) both;
+}
+
+.anim-scale-in {
+  animation: scaleIn 0.5s var(--ease-spring) both;
+}
+
+/* Staggered children */
+.stagger > * {
+  animation: fadeUp 0.5s var(--ease-out) both;
+}
+
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 80ms; }
+.stagger > *:nth-child(3) { animation-delay: 160ms; }
+.stagger > *:nth-child(4) { animation-delay: 240ms; }
+.stagger > *:nth-child(5) { animation-delay: 320ms; }
+.stagger > *:nth-child(6) { animation-delay: 400ms; }
+
+/* === Page Load Reveal (Intersection Observer) === */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === Hero animation === */
+.hero__eyebrow  { animation: fadeDown 0.5s 0.1s var(--ease-spring) both; }
+.hero__title    { animation: heroTitle 0.8s 0.2s var(--ease-out) both; }
+.hero__subtitle { animation: heroSubtitle 0.7s 0.4s var(--ease-out) both; }
+.hero__description { animation: fadeUp 0.6s 0.5s var(--ease-out) both; }
+.hero__actions  { animation: fadeUp 0.6s 0.65s var(--ease-out) both; }
+
+/* === Reduced Motion === */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  #map-container {
+    animation: none;
+  }
+}
+
+/* === Loading Spinner === */
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(46,125,50,0.2);
+  border-top-color: var(--clr-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* === Active county label === */
+@keyframes labelPop {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.county-label {
+  pointer-events: none;
+  font-family: var(--font-body);
+  font-size: 9px;
+  font-weight: 600;
+  fill: #fff;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  user-select: none;
+}
+/* css/themes.css — Theme-specific overrides */
+
+/* === Dark Mode Component Overrides === */
+[data-theme="dark"] body::before {
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 10%, rgba(76,175,80,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(25,118,210,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 50% 50%, rgba(255,179,0,0.05) 0%, transparent 70%);
+}
+
+[data-theme="dark"] .hero__title {
+  background: linear-gradient(135deg, #fff 0%, var(--clr-primary-light) 50%, #64B5F6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="dark"] #kenya-svg-map {
+  filter: drop-shadow(0 20px 60px rgba(0,0,0,0.5)) brightness(0.92);
+}
+
+[data-theme="dark"] .skeleton {
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0.04) 25%,
+    rgba(255,255,255,0.10) 50%,
+    rgba(255,255,255,0.04) 75%
+  );
+  background-size: 200% 100%;
+}
+
+[data-theme="dark"] .search-box__clear {
+  background: rgba(255,255,255,0.08);
+}
+
+[data-theme="dark"] .panel-grid-item,
+[data-theme="dark"] .external-link {
+  background: rgba(255,255,255,0.04);
+}
+
+[data-theme="dark"] kbd {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.12);
+  border-bottom-color: rgba(255,255,255,0.25);
+}
+
+/* Theme toggle icon swap */
+.theme-toggle__icon-light { display: inline; }
+.theme-toggle__icon-dark { display: none; }
+[data-theme="dark"] .theme-toggle__icon-light { display: none; }
+[data-theme="dark"] .theme-toggle__icon-dark { display: inline; }
+
+/* === Fullscreen mode === */
+:fullscreen #map-section {
+  background: var(--clr-bg);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+[data-theme="dark"] .fun-fact-box {
+  background: linear-gradient(135deg, rgba(255,179,0,0.06) 0%, rgba(255,143,0,0.04) 100%);
+}
+/* css/responsive.css — Breakpoints and responsive overrides */
+
+/* === Tablet (≤1024px) === */
+@media (max-width: 1024px) {
+  :root { --panel-width: 380px; }
+
+  #stats-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .quiz-options {
+    grid-template-columns: 1fr;
+  }
+
+  .external-links {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* === Mobile Landscape / Small Tablet (≤768px) === */
+@media (max-width: 768px) {
+  :root {
+    --panel-width: 100%;
+    --space-12: 32px;
+    --space-16: 40px;
+    --space-20: 48px;
+  }
+
+  .hero__title { font-size: clamp(2.25rem, 12vw, 3.25rem); }
+  .hero__subtitle { font-size: clamp(1.1rem, 5vw, 1.5rem); }
+  .hero__description { font-size: var(--text-base); padding: 0 var(--space-4); }
+
+  .hero__actions {
+    flex-direction: column;
+    width: 100%;
+    padding: 0 var(--space-6);
+  }
+
+  .hero__actions .btn { width: 100%; justify-content: center; }
+
+  #search-wrapper { padding: 0 var(--space-4); }
+
+  #stats-bar {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 var(--space-4);
+  }
+
+  .panel-grid { grid-template-columns: 1fr; }
+
+  #info-panel {
+    width: 100%;
+  }
+
+  .panel-header__name { font-size: var(--text-3xl); }
+
+  #map-stage { max-width: 100%; padding: 0 var(--space-2); }
+
+  #navbar { padding: 0 var(--space-4); }
+  .navbar__brand { font-size: var(--text-lg); }
+
+  #map-legend {
+    display: none;
+  }
+
+  .quiz-card { padding: var(--space-6); }
+  .quiz-question { font-size: var(--text-xl); }
+
+  #scroll-top {
+    bottom: var(--space-4);
+    right: var(--space-4);
+  }
+}
+
+/* === Mobile Portrait (≤480px) === */
+@media (max-width: 480px) {
+  #stats-bar { grid-template-columns: repeat(2, 1fr); gap: var(--space-3); }
+  .stat-card { padding: var(--space-4); }
+  .stat-card__value { font-size: var(--text-xl); }
+
+  .navbar__actions .btn--secondary span.label-text { display: none; }
+
+  #map-controls {
+    bottom: var(--space-2);
+    right: var(--space-2);
+  }
+
+  .map-ctrl-btn { width: 36px; height: 36px; font-size: 0.9rem; }
+
+  .panel-body { padding: var(--space-4); }
+  .panel-header { padding: var(--space-6) var(--space-4) var(--space-3); }
+}
+
+/* === Landscape orientation specific === */
+@media (max-height: 500px) and (orientation: landscape) {
+  #hero { min-height: auto; padding: var(--space-16) var(--space-6); }
+  #map-section { min-height: auto; }
+}
+
+/* === High contrast mode support === */
+@media (prefers-contrast: high) {
+  .glass-card, .stat-card, #info-panel, #search-dropdown {
+    border-width: 2px;
+    border-color: var(--clr-text-primary);
+  }
+
+  .county {
+    stroke-width: 2 !important;
+  }
+}
+
+/* === Print === */
+@media print {
+  #navbar, #map-controls, #scroll-top, #info-panel, .btn { display: none !important; }
+}
+
+</style>
+</head>
+<body>
+
+
+<div id="app">
+
+  <!-- ============== NAVBAR ============== -->
+  <nav id="navbar" aria-label="Primary">
+    <div class="navbar__brand">Project <span>Culture</span></div>
+    <div class="navbar__actions">
+      <button class="btn btn--secondary btn--icon" id="shortcuts-btn" aria-label="Keyboard shortcuts" title="Keyboard shortcuts (?)">⌨️</button>
+      <button class="btn btn--secondary btn--icon" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode (D)">
+        <span class="theme-toggle__icon-light">🌙</span>
+        <span class="theme-toggle__icon-dark">☀️</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ============== HERO ============== -->
+  <section id="hero">
+    <div class="hero__eyebrow">🇰🇪 47 Counties · One Nation</div>
+    <h1 class="hero__title">Project Culture</h1>
+    <p class="hero__subtitle">Explore Kenya. Discover Its Culture.</p>
+    <p class="hero__description">
+      An interactive explorer showcasing the beauty, culture, geography, history,
+      and diversity of Kenya's 47 counties.
+    </p>
+    <div class="hero__actions">
+      <button class="btn btn--primary" id="explore-btn">🗺️ Explore Kenya</button>
+    </div>
+
+    <div id="search-wrapper" style="margin-top: var(--space-10);">
+      <div class="search-box">
+        <span class="search-box__icon">🔍</span>
+        <input
+          type="text"
+          id="search-input"
+          class="search-box__input"
+          placeholder="Search any county..."
+          autocomplete="off"
+          aria-label="Search for a Kenyan county"
+        >
+        <button class="search-box__clear" id="search-clear" aria-label="Clear search">✕</button>
+      </div>
+      <div id="search-dropdown" role="listbox" aria-label="Search results"></div>
+    </div>
+  </section>
+
+  <!-- ============== STATISTICS DASHBOARD ============== -->
+  <section style="padding: var(--space-12) var(--space-6); display:flex; flex-direction:column; align-items:center; gap: var(--space-8);">
+    <div class="map-section__header reveal">
+      <div class="section-label">By the Numbers</div>
+      <h2 class="section-title">Kenya at a Glance</h2>
+      <p class="section-subtitle">Key statistics across all 47 counties</p>
+    </div>
+    <div id="stats-bar"></div>
+
+    <div class="glass-card reveal" style="width:100%; max-width:900px; padding: var(--space-6);">
+      <div class="panel-section__title" style="border:none; margin-bottom: var(--space-4);">📊 Top 10 Most Populous Counties</div>
+      <canvas id="population-chart" style="width:100%; height:280px;"></canvas>
+    </div>
+  </section>
+
+  <!-- ============== MAP SECTION ============== -->
+  <section id="map-section">
+    <div class="map-section__header reveal">
+      <div class="section-label">Interactive Map</div>
+      <h2 class="section-title">Discover Every County</h2>
+      <p class="section-subtitle">Hover to preview, click to explore. Scroll or pinch to zoom, drag to pan.</p>
+    </div>
+
+    <div id="map-stage">
+      <div id="map-container" role="application" aria-label="Interactive map of Kenya"></div>
+
+      <div id="map-controls">
+        <button class="map-ctrl-btn" id="zoom-in-btn" aria-label="Zoom in" title="Zoom in">＋</button>
+        <button class="map-ctrl-btn" id="zoom-out-btn" aria-label="Zoom out" title="Zoom out">－</button>
+        <button class="map-ctrl-btn" id="zoom-reset-btn" aria-label="Reset view" title="Reset view">⟲</button>
+        <button class="map-ctrl-btn" id="random-county-btn" aria-label="Random county" title="Random county (R)">🎲</button>
+        <button class="map-ctrl-btn" id="fullscreen-toggle" aria-label="Fullscreen" title="Fullscreen">⛶</button>
+      </div>
+
+      <div id="map-legend">
+        <div class="legend__title">Legend</div>
+        <div class="legend__item"><span class="legend__dot" style="background:#2E7D32;"></span> Click any county</div>
+        <div class="legend__item"><span class="legend__dot" style="background:#FFB300;"></span> Search result</div>
+      </div>
+    </div>
+
+    <div style="text-align:center; max-width:600px;">
+      <p class="section-subtitle" style="font-size:var(--text-sm);">⭐ Your Favorites</p>
+    </div>
+    <div id="favorites-bar"></div>
+  </section>
+
+  <!-- ============== QUIZ SECTION ============== -->
+  <section id="quiz-section">
+    <div class="map-section__header reveal">
+      <div class="section-label">Test Yourself</div>
+      <h2 class="section-title">Kenya Counties Quiz</h2>
+      <p class="section-subtitle">10 questions on capitals, governors, and more. Can you score 100?</p>
+    </div>
+
+    <div class="quiz-card reveal">
+      <div id="quiz-container">
+        <div style="text-align:center;">
+          <div style="font-size:3rem; margin-bottom:var(--space-4);">🧠</div>
+          <p style="color:var(--clr-text-secondary); margin-bottom:var(--space-8);">
+            Ready to put your Kenya knowledge to the test?
+          </p>
+          <button class="btn btn--primary" id="quiz-start-btn">Start Quiz</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== FOOTER ============== -->
+  <footer>
+    <p>Project Culture — An independent educational explorer of Kenya's 47 counties.</p>
+    <p style="margin-top: var(--space-2);">Data compiled for illustrative purposes. Always verify with official county government sources.</p>
+  </footer>
+
+</div>
+
+<!-- ============== OVERLAYS / FLOATING UI ============== -->
+<div id="overlay"></div>
+<aside id="info-panel" aria-label="County details panel"></aside>
+<div id="map-tooltip" role="tooltip"></div>
+<div id="toast-container" aria-live="polite"></div>
+
+<button id="scroll-top" class="btn btn--secondary btn--icon-lg" aria-label="Scroll to top">↑</button>
+
+<!-- ============== KEYBOARD SHORTCUTS MODAL ============== -->
+<div id="shortcuts-modal">
+  <div class="glass-card" style="width:100%; max-width:440px; padding: var(--space-8);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-6);">
+      <h3 style="font-family:var(--font-display); font-size:var(--text-2xl); font-weight:700;">Keyboard Shortcuts</h3>
+      <button class="panel-header__close" id="shortcuts-close" style="position:static; background:var(--clr-bg-secondary); color:var(--clr-text-primary); border-color:var(--clr-border);" aria-label="Close shortcuts">✕</button>
+    </div>
+    <div class="shortcuts-grid">
+      <div class="shortcut-item"><span>Focus search</span><kbd>/</kbd></div>
+      <div class="shortcut-item"><span>Random county</span><kbd>R</kbd></div>
+      <div class="shortcut-item"><span>Toggle dark mode</span><kbd>D</kbd></div>
+      <div class="shortcut-item"><span>Close panel</span><kbd>Esc</kbd></div>
+      <div class="shortcut-item"><span>Show shortcuts</span><kbd>?</kbd></div>
+      <div class="shortcut-item"><span>Navigate results</span><kbd>↑ ↓</kbd></div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script>
+window.__COUNTIES_DATA__ = {"counties": [{"id": 1, "name": "Mombasa", "capital": "Mombasa City", "population": "1,208,333", "area": "229.9 km\u00b2", "governor": "Abdulswamad Nassir", "languages": ["Swahili", "English", "Mijikenda", "Arabic"], "tribes": ["Mijikenda", "Arab", "Swahili", "Bajun"], "economy": ["Tourism", "Port/Shipping", "Trade", "Fishing", "Manufacturing"], "tourism": ["Fort Jesus", "Mombasa Old Town", "Nyali Beach", "Haller Park", "Mombasa Marine Reserve"], "gallery": [], "history": "Mombasa is Kenya's oldest city and main port. It has been a major trading hub since the 9th century, attracting Arab, Persian, and Portuguese traders. Fort Jesus, built by the Portuguese in 1593, stands as a testament to this rich history.", "funFact": "Mombasa is the only county in Kenya that is entirely an island city connected to the mainland by causeways and ferries.", "nationalParks": ["Mombasa Marine National Reserve"], "universities": ["Technical University of Mombasa", "Coast Institute of Technology"], "hospitals": ["Coast General Teaching & Referral Hospital", "Aga Khan Hospital Mombasa"], "climate": "Hot and humid tropical climate with temperatures ranging 22\u201333\u00b0C. Two rainy seasons: April\u2013June and October\u2013November.", "coordinates": {"lat": -4.0435, "lng": 39.6682}, "majorTowns": ["Mombasa City", "Nyali", "Bamburi", "Likoni", "Kisauni"], "wikipedia": "https://en.wikipedia.org/wiki/Mombasa_County", "googleMaps": "https://maps.google.com/?q=Mombasa+County+Kenya", "roadNetwork": "A109 Mombasa\u2013Nairobi Highway, Makupa Causeway, Likoni Ferry"}, {"id": 2, "name": "Kwale", "capital": "Kwale Town", "population": "866,820", "area": "8,270 km\u00b2", "governor": "Fatuma Achani", "languages": ["Swahili", "Digo", "English"], "tribes": ["Digo", "Duruma", "Kamba"], "economy": ["Tourism", "Agriculture", "Mining (Titanium)", "Fishing"], "tourism": ["Diani Beach", "Shimba Hills National Reserve", "Wasini Island", "Chale Island"], "gallery": [], "history": "Kwale County, formerly part of the Coast Province, is renowned for its pristine beaches and rich Mijikenda culture. The Shimba Hills harbor some of Kenya's most diverse wildlife.", "funFact": "Kwale is home to the largest sable antelope population in East Africa within Shimba Hills.", "nationalParks": ["Shimba Hills National Reserve", "Mwaluganje Elephant Sanctuary"], "universities": ["Pwani University (satellite)"], "hospitals": ["Kwale County Referral Hospital"], "climate": "Tropical with coastal humidity. Rainfall 800\u20131200mm annually.", "coordinates": {"lat": -4.1833, "lng": 39.45}, "majorTowns": ["Kwale", "Diani", "Ukunda", "Msambweni", "Kinango"], "wikipedia": "https://en.wikipedia.org/wiki/Kwale_County", "googleMaps": "https://maps.google.com/?q=Kwale+County+Kenya", "roadNetwork": "B8 South Coast Road, C106 Kwale\u2013Kinango Road"}, {"id": 3, "name": "Kilifi", "capital": "Kilifi Town", "population": "1,453,787", "area": "12,609.7 km\u00b2", "governor": "Gideon Mung'aro", "languages": ["Swahili", "Giriama", "English"], "tribes": ["Giriama", "Chonyi", "Kauma", "Rabai", "Ribe"], "economy": ["Tourism", "Agriculture", "Fishing", "Manufacturing"], "tourism": ["Watamu Beach", "Malindi Marine Reserve", "Gede Ruins", "Arabuko-Sokoke Forest"], "gallery": [], "history": "Kilifi is home to ancient ruins including the Gede Ruins, a medieval Swahili town that flourished from the 13th to 17th centuries. The county has one of the richest coastlines in Kenya.", "funFact": "The Arabuko-Sokoke Forest in Kilifi is one of the largest remaining coastal forests in East Africa and home to rare species like the golden-rumped elephant shrew.", "nationalParks": ["Arabuko-Sokoke Forest Reserve", "Mida Creek"], "universities": ["Pwani University"], "hospitals": ["Kilifi County Hospital", "Kilifi Referral Hospital"], "climate": "Hot tropical coast climate. Annual rainfall 900\u20131500mm.", "coordinates": {"lat": -3.6305, "lng": 39.8499}, "majorTowns": ["Kilifi", "Malindi", "Watamu", "Kaloleni", "Mariakani"], "wikipedia": "https://en.wikipedia.org/wiki/Kilifi_County", "googleMaps": "https://maps.google.com/?q=Kilifi+County+Kenya", "roadNetwork": "A7 Mombasa\u2013Malindi Road, B8 Kilifi\u2013Mariakani Road"}, {"id": 4, "name": "Tana River", "capital": "Hola", "population": "315,943", "area": "35,375.8 km\u00b2", "governor": "Dhadho Godhana", "languages": ["Swahili", "Orma", "Pokomo", "English"], "tribes": ["Orma", "Pokomo", "Wardei", "Somali"], "economy": ["Pastoralism", "Agriculture", "Fishing"], "tourism": ["Tana River Primate Reserve", "Arawale National Reserve"], "gallery": [], "history": "Tana River County is named after Kenya's longest river, the Tana. The county is sparsely populated and has been historically affected by inter-ethnic conflicts between the Orma and Pokomo communities.", "funFact": "Tana River County is home to two critically endangered primate species: the Tana River Red Colobus and the Tana River Mangabey.", "nationalParks": ["Tana River Primate National Reserve", "Arawale National Reserve"], "universities": [], "hospitals": ["Hola District Hospital"], "climate": "Semi-arid to arid. Low and erratic rainfall 200\u2013500mm.", "coordinates": {"lat": -1.4819, "lng": 40.031}, "majorTowns": ["Hola", "Garsen", "Bura", "Madogo"], "wikipedia": "https://en.wikipedia.org/wiki/Tana_River_County", "googleMaps": "https://maps.google.com/?q=Tana+River+County+Kenya", "roadNetwork": "C112 Garsen\u2013Hola Road"}, {"id": 5, "name": "Lamu", "capital": "Lamu Town", "population": "143,920", "area": "6,497.7 km\u00b2", "governor": "Issa Timamy", "languages": ["Swahili", "Arabic", "English"], "tribes": ["Swahili", "Bajun", "Orma", "Somali"], "economy": ["Tourism", "Fishing", "Trade", "Dhow Building"], "tourism": ["Lamu Old Town (UNESCO)", "Shela Beach", "Manda Island", "Takwa Ruins"], "gallery": [], "history": "Lamu Old Town is Kenya's oldest living town and a UNESCO World Heritage Site. It has been a centre of Islamic culture and Swahili civilization for over 700 years.", "funFact": "Lamu Old Town is one of the best-preserved Swahili settlements in East Africa and has no cars \u2014 donkeys are the main mode of transport!", "nationalParks": ["Kiunga Marine National Reserve"], "universities": [], "hospitals": ["King Fahd County Hospital Lamu"], "climate": "Hot and humid tropical. Northeast monsoon November\u2013March; Southeast monsoon April\u2013October.", "coordinates": {"lat": -2.2686, "lng": 40.902}, "majorTowns": ["Lamu Town", "Mpeketoni", "Hindi", "Mokowe"], "wikipedia": "https://en.wikipedia.org/wiki/Lamu_County", "googleMaps": "https://maps.google.com/?q=Lamu+County+Kenya", "roadNetwork": "Ferry access; limited road network on mainland"}, {"id": 6, "name": "Taita-Taveta", "capital": "Wundanyi", "population": "340,671", "area": "17,083.9 km\u00b2", "governor": "Andrew Mwadime", "languages": ["Taita", "Swahili", "English"], "tribes": ["Taita", "Taveta", "Maasai"], "economy": ["Tourism", "Agriculture", "Horticulture", "Mining"], "tourism": ["Tsavo East NP", "Tsavo West NP", "Lake Chala", "Grogan's Castle"], "gallery": [], "history": "Taita-Taveta is home to the Taita Hills, one of Africa's biodiversity hotspots. The county hosts the largest national park complex in Kenya \u2014 Tsavo East and West.", "funFact": "Lake Chala, on the Kenya-Tanzania border in Taita-Taveta, is a volcanic crater lake with crystal-clear water reaching 92m depth.", "nationalParks": ["Tsavo East National Park", "Tsavo West National Park", "Chyulu Hills National Park"], "universities": ["Taita Taveta University"], "hospitals": ["Moi County Referral Hospital Voi"], "climate": "Semi-arid with rainfall 250\u2013750mm. Cooler in the Taita Hills.", "coordinates": {"lat": -3.3167, "lng": 38.35}, "majorTowns": ["Wundanyi", "Voi", "Taveta", "Mwatate"], "wikipedia": "https://en.wikipedia.org/wiki/Taita%E2%80%93Taveta_County", "googleMaps": "https://maps.google.com/?q=Taita+Taveta+County+Kenya", "roadNetwork": "A109 Nairobi\u2013Mombasa Highway passes through Voi"}, {"id": 7, "name": "Garissa", "capital": "Garissa Town", "population": "841,353", "area": "44,175.1 km\u00b2", "governor": "Nathif Jama", "languages": ["Somali", "Swahili", "English"], "tribes": ["Somali (Ogaden)", "Orma"], "economy": ["Pastoralism", "Trade", "Livestock"], "tourism": ["Arawale National Reserve", "Tana River Delta"], "gallery": [], "history": "Garissa is the largest county by area in the former North Eastern Province. It borders Somalia and has strong Somali cultural ties. The county gained tragic notoriety in 2015 with the Garissa University attack.", "funFact": "Garissa County is one of the fastest-growing counties in Kenya due to urbanization and the establishment of Garissa University.", "nationalParks": ["Rahole National Reserve"], "universities": ["Garissa University"], "hospitals": ["Garissa County Referral Hospital"], "climate": "Arid and semi-arid. Rainfall below 300mm per year.", "coordinates": {"lat": -0.4532, "lng": 39.6461}, "majorTowns": ["Garissa", "Dadaab", "Balambala", "Hulugho"], "wikipedia": "https://en.wikipedia.org/wiki/Garissa_County", "googleMaps": "https://maps.google.com/?q=Garissa+County+Kenya", "roadNetwork": "A3 Nairobi\u2013Garissa Highway"}, {"id": 8, "name": "Wajir", "capital": "Wajir Town", "population": "781,263", "area": "56,685.8 km\u00b2", "governor": "Ahmed Mukhtar", "languages": ["Somali", "Borana", "Swahili", "English"], "tribes": ["Somali (Degodia, Ajuran)", "Borana"], "economy": ["Pastoralism", "Livestock Trade", "Gum Arabic"], "tourism": ["Wajir Borana Cultural Heritage"], "gallery": [], "history": "Wajir is one of Kenya's most remote counties, covering vast arid semi-desert. It was part of the Northern Frontier District during British colonial rule and has strong Somali pastoral heritage.", "funFact": "Wajir County has one of the lowest population densities in Kenya despite being the second largest county by area.", "nationalParks": [], "universities": ["University of Nairobi (satellite)"], "hospitals": ["Wajir County Referral Hospital"], "climate": "Extremely arid. Rainfall 150\u2013300mm per year. Temperatures up to 40\u00b0C.", "coordinates": {"lat": 1.7471, "lng": 40.0573}, "majorTowns": ["Wajir", "Habaswein", "Buna", "Eldas"], "wikipedia": "https://en.wikipedia.org/wiki/Wajir_County", "googleMaps": "https://maps.google.com/?q=Wajir+County+Kenya", "roadNetwork": "B9 Garissa\u2013Wajir\u2013Mandera Road"}, {"id": 9, "name": "Mandera", "capital": "Mandera Town", "population": "867,457", "area": "25,797.7 km\u00b2", "governor": "Mohamed Adan Khalif", "languages": ["Somali", "Borana", "Swahili", "English"], "tribes": ["Somali (Garre, Murulle)", "Degodia"], "economy": ["Pastoralism", "Trade", "Cross-border Commerce"], "tourism": ["Mandera Triangle (Kenya, Ethiopia, Somalia border)"], "gallery": [], "history": "Mandera sits at the junction of Kenya, Ethiopia, and Somalia \u2014 the Mandera Triangle. It is Kenya's most northeasterly county with a predominantly Somali population and strong trade links to neighboring countries.", "funFact": "From Mandera town, you can see three countries \u2014 Kenya, Somalia, and Ethiopia \u2014 simultaneously!", "nationalParks": [], "universities": [], "hospitals": ["Mandera County Referral Hospital"], "climate": "Hot and very dry. Temperatures average 30\u201340\u00b0C. Rainfall under 200mm.", "coordinates": {"lat": 3.9366, "lng": 41.867}, "majorTowns": ["Mandera", "Rhamu", "Elwak", "Takaba"], "wikipedia": "https://en.wikipedia.org/wiki/Mandera_County", "googleMaps": "https://maps.google.com/?q=Mandera+County+Kenya", "roadNetwork": "B9 Road connecting to Wajir and Garissa"}, {"id": 10, "name": "Marsabit", "capital": "Marsabit Town", "population": "459,785", "area": "70,961.2 km\u00b2", "governor": "Mohamud Ali", "languages": ["Borana", "Rendille", "Gabra", "Swahili", "English"], "tribes": ["Borana", "Rendille", "Gabra", "Samburu", "Turkana"], "economy": ["Pastoralism", "Tourism", "Camel Herding"], "tourism": ["Lake Turkana (World Heritage)", "Marsabit National Park", "Lake Paradise", "Chalbi Desert"], "gallery": [], "history": "Marsabit is Kenya's largest county. It contains the northern shores of Lake Turkana \u2014 a UNESCO World Heritage Site and home to the Jade Sea, the world's largest desert lake.", "funFact": "Marsabit is the largest county in Kenya at over 70,000 km\u00b2, larger than some countries!", "nationalParks": ["Marsabit National Park & Reserve", "Sibiloi National Park (shared)"], "universities": [], "hospitals": ["Marsabit County Referral Hospital"], "climate": "Arid. Marsabit town is cool due to altitude. Chalbi Desert is one of the hottest areas.", "coordinates": {"lat": 2.3357, "lng": 37.9893}, "majorTowns": ["Marsabit", "Moyale", "Laisamis", "North Horr"], "wikipedia": "https://en.wikipedia.org/wiki/Marsabit_County", "googleMaps": "https://maps.google.com/?q=Marsabit+County+Kenya", "roadNetwork": "A2 Nairobi\u2013Marsabit\u2013Moyale Highway (Ethiopia border)"}, {"id": 11, "name": "Isiolo", "capital": "Isiolo Town", "population": "268,002", "area": "25,336.1 km\u00b2", "governor": "Abdi Ibrahim Guyo", "languages": ["Borana", "Somali", "Samburu", "Swahili", "English"], "tribes": ["Borana", "Somali", "Samburu", "Meru", "Turkana"], "economy": ["Pastoralism", "Trade", "Tourism"], "tourism": ["Samburu National Reserve", "Buffalo Springs", "Shaba National Reserve"], "gallery": [], "history": "Isiolo is the gateway to northern Kenya. Originally a World War I settlement, it grew into a major town and transit hub. It sits at the crossroads where highland and arid environments meet.", "funFact": "Isiolo is often called the 'Gateway to Northern Kenya' \u2014 north of this town, you're entering a vast, untamed frontier.", "nationalParks": ["Samburu National Reserve", "Buffalo Springs National Reserve", "Shaba National Reserve"], "universities": [], "hospitals": ["Isiolo County Referral Hospital"], "climate": "Semi-arid to arid transitional zone. Rainfall 200\u2013500mm.", "coordinates": {"lat": 0.354, "lng": 37.582}, "majorTowns": ["Isiolo", "Merti", "Garbatulla", "Kinna"], "wikipedia": "https://en.wikipedia.org/wiki/Isiolo_County", "googleMaps": "https://maps.google.com/?q=Isiolo+County+Kenya", "roadNetwork": "A2 Nanyuki\u2013Isiolo\u2013Moyale Highway"}, {"id": 12, "name": "Meru", "capital": "Meru Town", "population": "1,545,714", "area": "6,930.1 km\u00b2", "governor": "Kawira Mwangaza", "languages": ["Meru", "Swahili", "English"], "tribes": ["Meru", "Tharaka"], "economy": ["Tea", "Coffee", "Miraa (Khat)", "Dairy", "Horticulture"], "tourism": ["Mount Kenya National Park", "Meru National Park", "Imenti Forest"], "gallery": [], "history": "Meru County is on the northeastern slopes of Mount Kenya. Famous for miraa (khat), tea, and coffee. The Meru people have a rich oral tradition and were among the first to be evangelized by Methodist missionaries.", "funFact": "Meru County produces over 80% of Kenya's miraa (khat), exported globally including to Somalia, Yemen, and the UK.", "nationalParks": ["Meru National Park", "Mount Kenya National Park (partial)"], "universities": ["University of Nairobi Meru Campus", "Kenya Methodist University"], "hospitals": ["Meru Teaching and Referral Hospital"], "climate": "Temperate on highlands, warmer in lower areas. Rainfall 1000\u20131700mm.", "coordinates": {"lat": 0.0467, "lng": 37.649}, "majorTowns": ["Meru", "Nkubu", "Maua", "Chuka", "Timau"], "wikipedia": "https://en.wikipedia.org/wiki/Meru_County", "googleMaps": "https://maps.google.com/?q=Meru+County+Kenya", "roadNetwork": "B6 Nairobi\u2013Meru Highway, A2 Meru\u2013Isiolo Road"}, {"id": 13, "name": "Tharaka-Nithi", "capital": "Chuka", "population": "393,177", "area": "2,609.4 km\u00b2", "governor": "Muthomi Njuki", "languages": ["Tharaka", "Meru", "Swahili", "English"], "tribes": ["Tharaka", "Meru", "Embu"], "economy": ["Tea", "Coffee", "Subsistence farming", "Miraa"], "tourism": ["Tharaka National Reserve", "Nithi River"], "gallery": [], "history": "Tharaka-Nithi is one of Kenya's smallest counties, carved out of the former Eastern Province. The Tharaka people are known for their unique cultural practices including traditional hunting.", "funFact": "The name Tharaka-Nithi comes from two rivers: the Tharaka lowlands and the Nithi River that flows through the county.", "nationalParks": ["Tharaka National Reserve"], "universities": ["Chuka University"], "hospitals": ["Chuka General Hospital"], "climate": "Temperate in highlands; hot and dry in Tharaka lowlands.", "coordinates": {"lat": -0.3333, "lng": 37.6167}, "majorTowns": ["Chuka", "Marimanti", "Gatunga", "Ishiara"], "wikipedia": "https://en.wikipedia.org/wiki/Tharaka-Nithi_County", "googleMaps": "https://maps.google.com/?q=Tharaka+Nithi+County+Kenya", "roadNetwork": "B6 Nairobi\u2013Chuka Road"}, {"id": 14, "name": "Embu", "capital": "Embu Town", "population": "608,599", "area": "2,821.1 km\u00b2", "governor": "Cecily Mbarire", "languages": ["Embu", "Swahili", "English"], "tribes": ["Embu", "Mbeere"], "economy": ["Tea", "Coffee", "Horticulture", "Dairy"], "tourism": ["Mount Kenya National Park", "Tana River headwaters"], "gallery": [], "history": "Embu County lies on the southeastern slopes of Mount Kenya. The Embu people are closely related to the Kikuyu and Meru, and historically farmed the fertile mountain slopes.", "funFact": "The iconic Tana River \u2014 Kenya's longest river \u2014 originates from the glaciers of Mount Kenya in Embu County.", "nationalParks": ["Mount Kenya National Park (partial)"], "universities": ["University of Embu"], "hospitals": ["Embu Level 5 Hospital"], "climate": "Cool and wet on Mount Kenya slopes. Rainfall 1000\u20131800mm.", "coordinates": {"lat": -0.53, "lng": 37.45}, "majorTowns": ["Embu", "Runyenjes", "Siakago", "Ishiara"], "wikipedia": "https://en.wikipedia.org/wiki/Embu_County", "googleMaps": "https://maps.google.com/?q=Embu+County+Kenya", "roadNetwork": "B6 Nairobi\u2013Embu Road, A3 Embu\u2013Garissa Road"}, {"id": 15, "name": "Kitui", "capital": "Kitui Town", "population": "1,136,187", "area": "30,496.4 km\u00b2", "governor": "Julius Malombe", "languages": ["Kamba", "Swahili", "English"], "tribes": ["Kamba"], "economy": ["Farming", "Cotton", "Honey", "Coal Mining (Mui Basin)"], "tourism": ["Tsavo East National Park (partial)", "Kora National Park"], "gallery": [], "history": "Kitui County is the homeland of the Kamba people. George Adamson, the conservationist immortalized in 'Born Free', worked at Kora National Reserve in Kitui until his death in 1989.", "funFact": "The Mui Basin in Kitui holds one of Africa's largest coal deposits, potentially transforming Kenya's energy landscape.", "nationalParks": ["Kora National Reserve", "Mwingi National Reserve"], "universities": ["South Eastern Kenya University (SEKU)"], "hospitals": ["Kitui County Referral Hospital"], "climate": "Semi-arid. Bimodal rainfall 500\u20131000mm. Hot and dry.", "coordinates": {"lat": -1.3667, "lng": 38.0167}, "majorTowns": ["Kitui", "Mwingi", "Mutomo", "Kyuso"], "wikipedia": "https://en.wikipedia.org/wiki/Kitui_County", "googleMaps": "https://maps.google.com/?q=Kitui+County+Kenya", "roadNetwork": "A3 Nairobi\u2013Kitui\u2013Garissa Highway"}, {"id": 16, "name": "Machakos", "capital": "Machakos Town", "population": "1,421,932", "area": "6,208.2 km\u00b2", "governor": "Wavinya Ndeti", "languages": ["Kamba", "Swahili", "English"], "tribes": ["Kamba"], "economy": ["Manufacturing", "Horticulture", "Trade", "Quarrying"], "tourism": ["Ol Donyo Sabuk National Park", "Machakos People's Park"], "gallery": [], "history": "Machakos was Kenya's first administrative capital under British rule. The Kamba people of Machakos are famed for their craftsmanship, particularly woodcarving. The county is also known as 'Macha Vegas'.", "funFact": "Machakos was the first administrative capital of Kenya during British colonial rule, before Nairobi took over in 1901.", "nationalParks": ["Ol Donyo Sabuk National Park"], "universities": ["Machakos University"], "hospitals": ["Machakos Level 5 Hospital"], "climate": "Semi-arid highlands. Bimodal rainfall 600\u20131000mm.", "coordinates": {"lat": -1.5177, "lng": 37.2634}, "majorTowns": ["Machakos", "Athi River", "Kangundo", "Tala", "Konza"], "wikipedia": "https://en.wikipedia.org/wiki/Machakos_County", "googleMaps": "https://maps.google.com/?q=Machakos+County+Kenya", "roadNetwork": "A109 Nairobi\u2013Mombasa Highway, A3 Machakos\u2013Kitui Road"}, {"id": 17, "name": "Makueni", "capital": "Wote", "population": "987,653", "area": "8,034.7 km\u00b2", "governor": "Mutula Kilonzo Jnr", "languages": ["Kamba", "Swahili", "English"], "tribes": ["Kamba"], "economy": ["Mango farming", "Cotton", "Livestock", "Sand harvesting"], "tourism": ["Chyulu Hills National Park", "Tsavo West borders"], "gallery": [], "history": "Makueni County is part of the Kamba homeland. Known for innovative governance, it runs a free healthcare system. The county is emerging as a mango production hub for Kenya and the region.", "funFact": "Makueni produces some of the best mangoes in Kenya and is pioneering a mango processing factory that helps farmers access global markets.", "nationalParks": ["Chyulu Hills National Park (partial)"], "universities": ["Machakos University (satellite)"], "hospitals": ["Makueni County Referral Hospital"], "climate": "Semi-arid to arid. Rainfall 400\u2013900mm.", "coordinates": {"lat": -2.2559, "lng": 37.8936}, "majorTowns": ["Wote", "Mtito Andei", "Sultan Hamud", "Kibwezi"], "wikipedia": "https://en.wikipedia.org/wiki/Makueni_County", "googleMaps": "https://maps.google.com/?q=Makueni+County+Kenya", "roadNetwork": "A109 Nairobi\u2013Mombasa Highway passes through Kibwezi"}, {"id": 18, "name": "Nyandarua", "capital": "Ol Kalou", "population": "638,289", "area": "3,304.7 km\u00b2", "governor": "Kiboino Kimani", "languages": ["Kikuyu", "Swahili", "English"], "tribes": ["Kikuyu"], "economy": ["Pyrethrum", "Wheat", "Potato", "Dairy"], "tourism": ["Aberdare National Park", "The Kinangop Plateau"], "gallery": [], "history": "Nyandarua was the heartland of the Mau Mau forest fighters during Kenya's independence struggle. The Aberdare Mountains are named after Lord Aberdare, a British politician.", "funFact": "Nyandarua County has the highest pyrethrum production in Kenya \u2014 the flower is used as a natural insecticide worldwide.", "nationalParks": ["Aberdare National Park"], "universities": [], "hospitals": ["J.M. Kariuki Memorial Hospital"], "climate": "Cold and wet. Rainfall 1000\u20132000mm. Frost common at high altitudes.", "coordinates": {"lat": -0.5833, "lng": 36.55}, "majorTowns": ["Ol Kalou", "Engineer", "Njabini", "Ndaragua"], "wikipedia": "https://en.wikipedia.org/wiki/Nyandarua_County", "googleMaps": "https://maps.google.com/?q=Nyandarua+County+Kenya", "roadNetwork": "B5 Nairobi\u2013Ol Kalou Road, C72 Ndaragua Road"}, {"id": 19, "name": "Nyeri", "capital": "Nyeri Town", "population": "759,164", "area": "3,337.5 km\u00b2", "governor": "Mutahi Kahiga", "languages": ["Kikuyu", "Swahili", "English"], "tribes": ["Kikuyu"], "economy": ["Tea", "Coffee", "Tourism", "Dairy", "Horticulture"], "tourism": ["Mount Kenya National Park", "Aberdare National Park", "Treetops Lodge", "Outspan Hotel"], "gallery": [], "history": "Nyeri is where Princess Elizabeth became Queen in 1952 at Treetops Lodge. It is also where Lord Baden-Powell, founder of the Boy Scout movement, is buried.", "funFact": "Queen Elizabeth II learned of her father King George VI's death \u2014 and thus became Queen \u2014 while staying at Treetops Lodge in Nyeri in 1952!", "nationalParks": ["Mount Kenya National Park", "Aberdare National Park"], "universities": ["Dedan Kimathi University of Technology"], "hospitals": ["Nyeri County Referral Hospital"], "climate": "Cool and wet. Rainfall 1000\u20132000mm. Temperature 10\u201325\u00b0C.", "coordinates": {"lat": -0.4167, "lng": 36.95}, "majorTowns": ["Nyeri", "Othaya", "Karatina", "Mukurwe-ini"], "wikipedia": "https://en.wikipedia.org/wiki/Nyeri_County", "googleMaps": "https://maps.google.com/?q=Nyeri+County+Kenya", "roadNetwork": "B5 Nairobi\u2013Nyeri\u2013Nanyuki Highway"}, {"id": 20, "name": "Kirinyaga", "capital": "Kerugoya", "population": "610,411", "area": "1,478.1 km\u00b2", "governor": "Ann Waiguru", "languages": ["Kikuyu", "Swahili", "English"], "tribes": ["Kikuyu"], "economy": ["Tea", "Coffee", "Rice", "Horticulture"], "tourism": ["Mount Kenya National Park", "Mwea National Reserve"], "gallery": [], "history": "Kirinyaga County is named after Mount Kenya (Kirinyaga in Kikuyu, meaning 'Mountain of Whiteness'). It is one of Kenya's richest agricultural counties, known for premium Kirinyaga tea and coffee.", "funFact": "The Mwea rice irrigation scheme in Kirinyaga is the largest rice growing region in Kenya, supplying much of the country's local rice.", "nationalParks": ["Mwea National Reserve", "Mount Kenya NP (partial)"], "universities": [], "hospitals": ["Kerugoya County Referral Hospital"], "climate": "Temperate in highlands. Rainfall 1000\u20132000mm.", "coordinates": {"lat": -0.49, "lng": 37.28}, "majorTowns": ["Kerugoya", "Kutus", "Sagana", "Kagio"], "wikipedia": "https://en.wikipedia.org/wiki/Kirinyaga_County", "googleMaps": "https://maps.google.com/?q=Kirinyaga+County+Kenya", "roadNetwork": "B6 Nairobi\u2013Kerugoya Road"}, {"id": 21, "name": "Murang'a", "capital": "Murang'a Town", "population": "1,056,640", "area": "2,558.8 km\u00b2", "governor": "Irungu Kang'ata", "languages": ["Kikuyu", "Swahili", "English"], "tribes": ["Kikuyu"], "economy": ["Tea", "Coffee", "Horticulture", "Trade"], "tourism": ["Thika Falls", "Fort Hall (historical)", "Gatamaiyu Forest"], "gallery": [], "history": "Murang'a (formerly Fort Hall) was a major Mau Mau resistance base during the liberation struggle. The county's Kenol-Muranga area is famous for commercial horticulture destined for European markets.", "funFact": "Murang'a County is one of the biggest producers of avocados in Kenya, exported globally for the avocado oil and food industry.", "nationalParks": ["Gatamaiyu Forest Reserve"], "universities": ["Murang'a University of Technology"], "hospitals": ["Murang'a Level 5 Hospital"], "climate": "Temperate to cool. Rainfall 1000\u20132000mm.", "coordinates": {"lat": -0.7233, "lng": 37.1525}, "majorTowns": ["Murang'a", "Thika", "Kenol", "Maragua"], "wikipedia": "https://en.wikipedia.org/wiki/Murang%27a_County", "googleMaps": "https://maps.google.com/?q=Muranga+County+Kenya", "roadNetwork": "A2 Nairobi\u2013Murang'a\u2013Nyeri Highway"}, {"id": 22, "name": "Kiambu", "capital": "Kiambu Town", "population": "2,417,735", "area": "2,543.5 km\u00b2", "governor": "Kimani Wamatangi", "languages": ["Kikuyu", "Swahili", "English"], "tribes": ["Kikuyu"], "economy": ["Tea", "Coffee", "Manufacturing", "Horticulture", "Real Estate"], "tourism": ["Fourteen Falls", "Kiambethu Tea Farm", "Karura Forest"], "gallery": [], "history": "Kiambu is the most populous county outside of Nairobi and forms the suburban belt of the capital. It is one of Kenya's most economically productive counties, known for premium tea estates.", "funFact": "Kiambu County has the highest number of millionaires per capita in Kenya outside Nairobi, driven by real estate and tea industry wealth.", "nationalParks": ["Karura Forest (partial)"], "universities": ["Jomo Kenyatta University of Agriculture & Technology (JKUAT)", "Zetech University"], "hospitals": ["Kiambu Level 5 Hospital", "Thika Level 5 Hospital"], "climate": "Temperate. Rainfall 1000\u20131800mm.", "coordinates": {"lat": -1.0319, "lng": 36.8322}, "majorTowns": ["Kiambu", "Thika", "Ruiru", "Limuru", "Githunguri"], "wikipedia": "https://en.wikipedia.org/wiki/Kiambu_County", "googleMaps": "https://maps.google.com/?q=Kiambu+County+Kenya", "roadNetwork": "A2 Nairobi\u2013Thika Superhighway, Northern Bypass"}, {"id": 23, "name": "Turkana", "capital": "Lodwar", "population": "926,976", "area": "68,680.3 km\u00b2", "governor": "Jeremiah Lomorukai", "languages": ["Turkana", "Swahili", "English"], "tribes": ["Turkana"], "economy": ["Pastoralism", "Oil exploration", "Fishing", "Tourism"], "tourism": ["Lake Turkana (UNESCO)", "Sibiloi National Park", "Central Island NP"], "gallery": [], "history": "Turkana County borders South Sudan, Uganda, and Ethiopia. Lake Turkana, the world's largest permanent desert lake, is a UNESCO World Heritage Site and 'Cradle of Mankind' \u2014 some of humanity's oldest fossils were found here.", "funFact": "Lake Turkana's southern island, Central Island, is home to the world's largest Nile crocodile breeding ground.", "nationalParks": ["Sibiloi National Park", "Central Island National Park", "South Island National Park"], "universities": [], "hospitals": ["Lodwar County Referral Hospital"], "climate": "Extremely hot and arid. Temperatures up to 42\u00b0C. Annual rainfall under 200mm.", "coordinates": {"lat": 3.1191, "lng": 35.5973}, "majorTowns": ["Lodwar", "Kakuma", "Lokichoggio", "Kalokol"], "wikipedia": "https://en.wikipedia.org/wiki/Turkana_County", "googleMaps": "https://maps.google.com/?q=Turkana+County+Kenya", "roadNetwork": "A1 Kitale\u2013Lodwar Road"}, {"id": 24, "name": "West Pokot", "capital": "Kapenguria", "population": "621,241", "area": "9,169.4 km\u00b2", "governor": "Simon Kachapin", "languages": ["Pokot", "Swahili", "English"], "tribes": ["Pokot (P\u00f6koot)"], "economy": ["Pastoralism", "Small-scale farming", "Mining"], "tourism": ["Suam Hot Springs", "Mount Sekerr", "Cherangani Hills"], "gallery": [], "history": "West Pokot is home to the Pokot people, famed for their age-set system, cattle culture, and distinctive adornment. The county borders Uganda and has significant cattle-rustling challenges.", "funFact": "Kapenguria, the county capital, was where Jomo Kenyatta was detained and tried by the British colonial government in 1952\u20131953.", "nationalParks": [], "universities": [], "hospitals": ["Kapenguria County Referral Hospital"], "climate": "Semi-arid lowlands; cool in Cherangani Hills. Rainfall 500\u20131200mm.", "coordinates": {"lat": 1.7373, "lng": 35.1129}, "majorTowns": ["Kapenguria", "Kacheliba", "Sigor", "Chepareria"], "wikipedia": "https://en.wikipedia.org/wiki/West_Pokot_County", "googleMaps": "https://maps.google.com/?q=West+Pokot+County+Kenya", "roadNetwork": "A1 Kitale\u2013Kapenguria Road"}, {"id": 25, "name": "Samburu", "capital": "Maralal", "population": "310,327", "area": "21,022.5 km\u00b2", "governor": "Jonathan Lelelit", "languages": ["Samburu", "Swahili", "English"], "tribes": ["Samburu"], "economy": ["Pastoralism", "Tourism"], "tourism": ["Samburu National Reserve", "Maralal International Camel Derby", "Matthews Range"], "gallery": [], "history": "The Samburu are a Nilotic people closely related to the Maasai, known as 'The Butterfly People' for their colorful attire and beadwork. Maralal is famous for hosting one of Africa's most unique camel races.", "funFact": "The Maralal International Camel Derby in Samburu is the only camel racing event in East Africa, drawing international participants every year.", "nationalParks": ["Samburu National Reserve (partial)"], "universities": [], "hospitals": ["Maralal County Referral Hospital"], "climate": "Semi-arid to arid. Rainfall 250\u2013600mm.", "coordinates": {"lat": 1.093, "lng": 36.989}, "majorTowns": ["Maralal", "Wamba", "Baragoi", "South Horr"], "wikipedia": "https://en.wikipedia.org/wiki/Samburu_County", "googleMaps": "https://maps.google.com/?q=Samburu+County+Kenya", "roadNetwork": "C77 Nyahururu\u2013Maralal Road"}, {"id": 26, "name": "Trans-Nzoia", "capital": "Kitale", "population": "990,341", "area": "2,469.9 km\u00b2", "governor": "George Natembeya", "languages": ["Sabaot", "Bukusu", "Nandi", "Swahili", "English"], "tribes": ["Sabaot", "Bukusu", "Kalenjin", "Luhya"], "economy": ["Maize farming", "Wheat", "Sunflower", "Dairy"], "tourism": ["Mount Elgon National Park", "Saiwa Swamp National Park", "Kitale Museum"], "gallery": [], "history": "Trans-Nzoia is Kenya's maize basket. Kitale became a European settlement in the early 1900s and developed as an agricultural hub. The county borders Uganda at Mount Elgon.", "funFact": "Trans-Nzoia County is Kenya's leading maize producer \u2014 it's often called the 'Breadbasket of Kenya'.", "nationalParks": ["Mount Elgon National Park", "Saiwa Swamp National Park"], "universities": ["University of Eldoret (satellite)"], "hospitals": ["Kitale County Referral Hospital"], "climate": "Temperate. Moderate rainfall 1200\u20131800mm. Very fertile.", "coordinates": {"lat": 1.0184, "lng": 35.0062}, "majorTowns": ["Kitale", "Endebess", "Saboti", "Kiminini"], "wikipedia": "https://en.wikipedia.org/wiki/Trans-Nzoia_County", "googleMaps": "https://maps.google.com/?q=Trans+Nzoia+County+Kenya", "roadNetwork": "A1 Eldoret\u2013Kitale Road, B2 Kitale\u2013Kapenguria"}, {"id": 27, "name": "Uasin Gishu", "capital": "Eldoret", "population": "1,163,186", "area": "3,345.2 km\u00b2", "governor": "Jonathan Bii", "languages": ["Nandi", "Sabaot", "Swahili", "English"], "tribes": ["Nandi", "Kipsigis", "Tugen", "Kikuyu"], "economy": ["Maize", "Wheat", "Athletics", "Manufacturing", "Trade"], "tourism": ["Eldoret Town", "Kipchoge Athletics Museum", "Sugoi area"], "gallery": [], "history": "Uasin Gishu is Kenya's athletics capital. Eldoret has produced more Olympic champions than any city of its size on earth. Runners like Eliud Kipchoge, the greatest marathon runner ever, hail from this region.", "funFact": "Eldoret is called the 'City of Champions' \u2014 more Olympic and World Championship gold medals have been won per capita by athletes from here than anywhere else on Earth.", "nationalParks": [], "universities": ["University of Eldoret", "Moi University (main campus)"], "hospitals": ["Moi Teaching & Referral Hospital"], "climate": "Cool and temperate. Altitude ~2100m. Rainfall 900\u20131500mm.", "coordinates": {"lat": 0.52, "lng": 35.2698}, "majorTowns": ["Eldoret", "Burnt Forest", "Turbo", "Moiben"], "wikipedia": "https://en.wikipedia.org/wiki/Uasin_Gishu_County", "googleMaps": "https://maps.google.com/?q=Uasin+Gishu+County+Kenya", "roadNetwork": "A104 Nairobi\u2013Eldoret Highway, A1 Eldoret\u2013Kitale Road"}, {"id": 28, "name": "Elgeyo-Marakwet", "capital": "Iten", "population": "454,480", "area": "3,029.8 km\u00b2", "governor": "Wisley Rotich", "languages": ["Keiyo", "Marakwet", "Swahili", "English"], "tribes": ["Keiyo", "Marakwet"], "economy": ["Athletics", "Agriculture", "Horticulture", "Tourism"], "tourism": ["Kerio Valley", "Iten Athletics Town", "Cherangani Hills"], "gallery": [], "history": "Elgeyo-Marakwet is home to Iten \u2014 dubbed the 'Home of Champions'. The Kerio Valley is a spectacular escarpment that provides a dramatic training environment for world-class athletes.", "funFact": "Iten town, the county capital, is internationally known as the 'Home of Champions' and attracts athletes from over 60 countries to train at altitude.", "nationalParks": ["Kerio Valley National Reserve"], "universities": ["Rift Valley Technical Training Institute"], "hospitals": ["Iten County Referral Hospital"], "climate": "Cool at high altitude, hot in Kerio Valley. Rainfall 600\u20131500mm.", "coordinates": {"lat": 0.6781, "lng": 35.5095}, "majorTowns": ["Iten", "Chepkorio", "Kamariny", "Tambach"], "wikipedia": "https://en.wikipedia.org/wiki/Elgeyo-Marakwet_County", "googleMaps": "https://maps.google.com/?q=Elgeyo+Marakwet+County+Kenya", "roadNetwork": "B56 Eldoret\u2013Iten\u2013Kabarnet Road"}, {"id": 29, "name": "Nandi", "capital": "Kapsabet", "population": "885,711", "area": "2,884.4 km\u00b2", "governor": "Stephen Sang", "languages": ["Nandi", "Swahili", "English"], "tribes": ["Nandi"], "economy": ["Tea", "Maize", "Athletics", "Dairy"], "tourism": ["Nandi Hills Tea Fields", "Aldai Tea Estate"], "gallery": [], "history": "The Nandi people fiercely resisted British colonial rule, with Koitalel Arap Samoei leading the Nandi Resistance for over a decade. The Nandi are among Kenya's top athletics producers.", "funFact": "Koitalel Arap Samoei, the legendary Nandi chief who resisted British colonization for 10 years, was treacherously killed under the guise of peace negotiations in 1905.", "nationalParks": [], "universities": ["University of Kabianga"], "hospitals": ["Kapsabet County Referral Hospital"], "climate": "Cool and wet highlands. Rainfall 1200\u20131800mm.", "coordinates": {"lat": 0.2019, "lng": 35.0983}, "majorTowns": ["Kapsabet", "Nandi Hills", "Mosoriot", "Kobujoi"], "wikipedia": "https://en.wikipedia.org/wiki/Nandi_County", "googleMaps": "https://maps.google.com/?q=Nandi+County+Kenya", "roadNetwork": "A104 Nakuru\u2013Eldoret Road, B32 Kapsabet\u2013Kisumu Road"}, {"id": 30, "name": "Baringo", "capital": "Kabarnet", "population": "666,763", "area": "11,075.3 km\u00b2", "governor": "Benjamin Cheboi", "languages": ["Tugen", "Pokot", "Endorois", "Swahili", "English"], "tribes": ["Tugen", "Pokot", "Endorois", "Njemp"], "economy": ["Pastoralism", "Agriculture", "Fishing", "Tourism"], "tourism": ["Lake Baringo", "Lake Bogoria", "Tugen Hills"], "gallery": [], "history": "Baringo County is home to Lake Baringo and Lake Bogoria, two of the Rift Valley lakes. Lake Bogoria is a Ramsar wetland famous for its flamingo population and hot springs.", "funFact": "Lake Bogoria in Baringo is home to the largest single congregation of flamingos in the world \u2014 up to 2 million birds at peak season.", "nationalParks": ["Lake Bogoria National Reserve"], "universities": [], "hospitals": ["Kabarnet County Referral Hospital"], "climate": "Semi-arid lowlands; cool in Tugen Hills. Rainfall 500\u20131200mm.", "coordinates": {"lat": 0.491, "lng": 36.082}, "majorTowns": ["Kabarnet", "Eldama Ravine", "Mogotio", "Marigat"], "wikipedia": "https://en.wikipedia.org/wiki/Baringo_County", "googleMaps": "https://maps.google.com/?q=Baringo+County+Kenya", "roadNetwork": "B56 Nakuru\u2013Kabarnet Road"}, {"id": 31, "name": "Laikipia", "capital": "Nanyuki", "population": "518,560", "area": "9,462.5 km\u00b2", "governor": "Joshua Irungu", "languages": ["Kikuyu", "Maasai", "Samburu", "Swahili", "English"], "tribes": ["Kikuyu", "Maasai", "Samburu", "Turkana"], "economy": ["Ranching", "Tourism", "Horticulture", "Floriculture"], "tourism": ["Ol Pejeta Conservancy", "Lewa Wildlife Conservancy", "Mount Kenya foothills"], "gallery": [], "history": "Laikipia Plateau is one of Kenya's most important wildlife areas outside national parks. Ol Pejeta Conservancy houses the last two northern white rhinos on Earth.", "funFact": "Ol Pejeta Conservancy in Laikipia is home to Najin and Fatu, the last two northern white rhinos in existence, kept under 24-hour armed guard.", "nationalParks": ["Ol Pejeta Conservancy", "Lewa Wildlife Conservancy", "Solio Ranch"], "universities": ["Mount Kenya University"], "hospitals": ["Nanyuki Teaching and Referral Hospital"], "climate": "Cool and semi-arid plateau. Rainfall 500\u20131000mm.", "coordinates": {"lat": 0.01, "lng": 36.98}, "majorTowns": ["Nanyuki", "Rumuruti", "Nyahururu", "Doldol"], "wikipedia": "https://en.wikipedia.org/wiki/Laikipia_County", "googleMaps": "https://maps.google.com/?q=Laikipia+County+Kenya", "roadNetwork": "A2 Nairobi\u2013Nanyuki Road, B5 Nyahururu\u2013Nanyuki Road"}, {"id": 32, "name": "Nakuru", "capital": "Nakuru City", "population": "2,162,202", "area": "7,495.1 km\u00b2", "governor": "Susan Kihika", "languages": ["Kikuyu", "Kalenjin", "Swahili", "English"], "tribes": ["Kikuyu", "Kalenjin", "Maasai"], "economy": ["Agriculture", "Manufacturing", "Tourism", "Floriculture"], "tourism": ["Lake Nakuru National Park", "Menengai Crater", "Hyrax Hill", "Hell's Gate"], "gallery": [], "history": "Nakuru is Kenya's fourth largest city and an industrial hub. Lake Nakuru was once world-famous for its flamingos, though population has declined. Hell's Gate was the inspiration for Disney's Pride Rock in The Lion King.", "funFact": "Hell's Gate National Park in Nakuru inspired the landscape of The Lion King, with the Maasai Mara savanna also contributing to the movie's visual design.", "nationalParks": ["Lake Nakuru National Park", "Hell's Gate National Park", "Mount Longonot National Park"], "universities": ["Egerton University", "University of Nakuru"], "hospitals": ["Nakuru Level 5 Hospital"], "climate": "Temperate to warm. Rainfall 700\u20131200mm. Located in the Rift Valley.", "coordinates": {"lat": -0.3031, "lng": 36.08}, "majorTowns": ["Nakuru City", "Naivasha", "Gilgil", "Molo", "Subukia"], "wikipedia": "https://en.wikipedia.org/wiki/Nakuru_County", "googleMaps": "https://maps.google.com/?q=Nakuru+County+Kenya", "roadNetwork": "A104 Nairobi\u2013Nakuru\u2013Eldoret Highway"}, {"id": 33, "name": "Narok", "capital": "Narok Town", "population": "1,157,873", "area": "17,921.2 km\u00b2", "governor": "Patrick Ole Ntutu", "languages": ["Maa (Maasai)", "Swahili", "English"], "tribes": ["Maasai", "Kipsigis"], "economy": ["Tourism", "Wheat farming", "Maize", "Livestock"], "tourism": ["Maasai Mara National Reserve", "Mara River", "Oloolaimutia Gate"], "gallery": [], "history": "Narok County is home to the Maasai Mara, one of the world's greatest wildlife spectacles. The Maasai people have lived in harmony with wildlife for centuries, making them iconic symbols of Kenya.", "funFact": "The Maasai Mara hosts the Great Wildebeest Migration \u2014 over 1.5 million wildebeest, 500,000 zebras and 200,000 gazelles cross the Mara River annually in the world's greatest wildlife show.", "nationalParks": ["Maasai Mara National Reserve"], "universities": [], "hospitals": ["Narok County Referral Hospital"], "climate": "Warm savanna with cool mornings. Rainfall 700\u20131200mm.", "coordinates": {"lat": -1.08, "lng": 35.87}, "majorTowns": ["Narok", "Kilgoris", "Lemek", "Sekenani"], "wikipedia": "https://en.wikipedia.org/wiki/Narok_County", "googleMaps": "https://maps.google.com/?q=Narok+County+Kenya", "roadNetwork": "B3 Nairobi\u2013Narok Road, C12 Narok\u2013Sekenani Road"}, {"id": 34, "name": "Kajiado", "capital": "Kajiado Town", "population": "1,117,840", "area": "21,292.7 km\u00b2", "governor": "Joseph Ole Lenku", "languages": ["Maa (Maasai)", "Swahili", "English"], "tribes": ["Maasai", "Kikuyu"], "economy": ["Tourism", "Livestock", "Real Estate", "Soda Ash (Lake Magadi)"], "tourism": ["Amboseli National Park", "Lake Magadi", "Ngong Hills", "Olorgesailie"], "gallery": [], "history": "Kajiado is Maasai heartland with stunning views of Mount Kilimanjaro from Amboseli. Olorgesailie is a prehistoric site where Homo erectus tools dating back 700,000 years were found.", "funFact": "From Amboseli National Park in Kajiado, you can photograph elephants with Mount Kilimanjaro as the backdrop \u2014 one of Africa's most iconic images.", "nationalParks": ["Amboseli National Park", "Olorgesailie Prehistoric Site"], "universities": [], "hospitals": ["Kajiado County Referral Hospital"], "climate": "Semi-arid. Hot and dry. Rainfall 300\u2013700mm.", "coordinates": {"lat": -1.853, "lng": 36.776}, "majorTowns": ["Kajiado", "Ngong", "Ongata Rongai", "Kitengela", "Namanga"], "wikipedia": "https://en.wikipedia.org/wiki/Kajiado_County", "googleMaps": "https://maps.google.com/?q=Kajiado+County+Kenya", "roadNetwork": "A104 Nairobi\u2013Namanga Road, B8 Kajiado\u2013Magadi Road"}, {"id": 35, "name": "Kericho", "capital": "Kericho Town", "population": "901,777", "area": "2,479.3 km\u00b2", "governor": "Erick Mutai", "languages": ["Kipsigis", "Swahili", "English"], "tribes": ["Kipsigis"], "economy": ["Tea", "Maize", "Athletics", "Dairy"], "tourism": ["Tea gardens", "Chagaik Arboretum", "Kipchoge Keino Stadium"], "gallery": [], "history": "Kericho is Kenya's tea capital, home to some of the world's finest tea estates. The county's climate \u2014 afternoon rainfall, volcanic soil, and altitude \u2014 creates perfect tea growing conditions.", "funFact": "Kericho County produces approximately 15% of the world's black tea. Tea estates here are so large they're visible from satellite images!", "nationalParks": [], "universities": ["University of Kabianga"], "hospitals": ["Kericho County Referral Hospital"], "climate": "Cool and very wet. Annual rainfall 1600\u20132200mm, very reliable.", "coordinates": {"lat": -0.367, "lng": 35.286}, "majorTowns": ["Kericho", "Londiani", "Litein", "Chemosit"], "wikipedia": "https://en.wikipedia.org/wiki/Kericho_County", "googleMaps": "https://maps.google.com/?q=Kericho+County+Kenya", "roadNetwork": "A1 Nakuru\u2013Kericho\u2013Kisumu Road"}, {"id": 36, "name": "Bomet", "capital": "Bomet Town", "population": "875,689", "area": "1,997.9 km\u00b2", "governor": "Hillary Barchok", "languages": ["Kipsigis", "Maasai", "Swahili", "English"], "tribes": ["Kipsigis", "Maasai"], "economy": ["Tea", "Maize", "Livestock", "Horticulture"], "tourism": ["Chepalungu Forest", "Sotik Tea zone"], "gallery": [], "history": "Bomet County is in the heart of Kipsigis territory, known for its tea production and athletics. The county was carved from Kericho and continues its agricultural heritage.", "funFact": "Bomet County is one of Kenya's top tea and coffee exporting counties by volume, yet it remains one of the least urbanized.", "nationalParks": ["Chepalungu Forest Reserve"], "universities": [], "hospitals": ["Bomet County Referral Hospital"], "climate": "Cool and wet. Rainfall 1200\u20131800mm.", "coordinates": {"lat": -0.781, "lng": 35.343}, "majorTowns": ["Bomet", "Sotik", "Longisa", "Chepalungu"], "wikipedia": "https://en.wikipedia.org/wiki/Bomet_County", "googleMaps": "https://maps.google.com/?q=Bomet+County+Kenya", "roadNetwork": "B1 Nakuru\u2013Kisii Road, C23 Bomet\u2013Narok Road"}, {"id": 37, "name": "Kakamega", "capital": "Kakamega Town", "population": "1,867,579", "area": "3,033.8 km\u00b2", "governor": "Fernandes Barasa", "languages": ["Luhya (Tiriki, Idakho, etc.)", "Swahili", "English"], "tribes": ["Luhya (various sub-tribes)"], "economy": ["Sugarcane", "Tea", "Mining (Gold)", "Agriculture"], "tourism": ["Kakamega Forest National Reserve", "Crying Stone of Ilesi"], "gallery": [], "history": "Kakamega Forest is East Africa's only remaining equatorial rainforest and is estimated to be over 5 million years old. The county's Luhya people have a rich tradition of isukuti music and wrestling.", "funFact": "Kakamega Forest is a fragment of the ancient Central African rainforest and contains plants and animals found nowhere else in East Africa.", "nationalParks": ["Kakamega Forest National Reserve"], "universities": ["Masinde Muliro University of Science and Technology"], "hospitals": ["Kakamega Level 5 Hospital"], "climate": "Tropical humid. Heavy rainfall 1700\u20132200mm.", "coordinates": {"lat": 0.2827, "lng": 34.7519}, "majorTowns": ["Kakamega", "Mumias", "Butere", "Malava", "Lugari"], "wikipedia": "https://en.wikipedia.org/wiki/Kakamega_County", "googleMaps": "https://maps.google.com/?q=Kakamega+County+Kenya", "roadNetwork": "A1 Kisumu\u2013Kakamega\u2013Eldoret Road"}, {"id": 38, "name": "Vihiga", "capital": "Vihiga Town", "population": "590,013", "area": "563.3 km\u00b2", "governor": "Wilber Ottichilo", "languages": ["Maragoli", "Tiriki", "Swahili", "English"], "tribes": ["Luhya (Maragoli, Tiriki, Idakho, Isukha)"], "economy": ["Agriculture", "Tea", "Trade", "Remittances"], "tourism": ["Vihiga Forest", "Tiriki Cultural Sites"], "gallery": [], "history": "Vihiga is Kenya's smallest county by area but one of its most densely populated. The Maragoli sub-tribe of the Luhya are known for their strong community bonds, education emphasis, and diaspora.", "funFact": "Vihiga County is one of the most densely populated counties in Kenya, with over 1,000 people per square kilometer in some areas.", "nationalParks": [], "universities": [], "hospitals": ["Vihiga County Referral Hospital"], "climate": "Tropical, humid. Rainfall 1500\u20132000mm.", "coordinates": {"lat": 0.078, "lng": 34.724}, "majorTowns": ["Vihiga", "Mbale", "Hamisi", "Luanda"], "wikipedia": "https://en.wikipedia.org/wiki/Vihiga_County", "googleMaps": "https://maps.google.com/?q=Vihiga+County+Kenya", "roadNetwork": "A1 Kisumu\u2013Kakamega Road, B5 Vihiga\u2013Mbale Road"}, {"id": 39, "name": "Bungoma", "capital": "Bungoma Town", "population": "1,670,570", "area": "3,032.4 km\u00b2", "governor": "Ken Lusaka", "languages": ["Bukusu", "Tachoni", "Swahili", "English"], "tribes": ["Luhya (Bukusu, Tachoni, Kabras)"], "economy": ["Sugar", "Maize", "Tea", "Trade"], "tourism": ["Mount Elgon National Park", "Chetambe's Fort (historical)"], "gallery": [], "history": "Bungoma County borders Uganda and is home to the Bukusu people. The county fought significant battles with colonizers, commemorated at Chetambe's Fort. Mount Elgon is an ancient extinct volcano.", "funFact": "Mount Elgon, straddling Kenya and Uganda on Bungoma's border, is the oldest and largest extinct volcano in East Africa, at around 24 million years old.", "nationalParks": ["Mount Elgon National Park"], "universities": ["Kibabii University"], "hospitals": ["Bungoma County Referral Hospital"], "climate": "Temperate and wet. Rainfall 1400\u20132000mm.", "coordinates": {"lat": 0.5635, "lng": 34.5606}, "majorTowns": ["Bungoma", "Webuye", "Kimilili", "Malakisi"], "wikipedia": "https://en.wikipedia.org/wiki/Bungoma_County", "googleMaps": "https://maps.google.com/?q=Bungoma+County+Kenya", "roadNetwork": "A104 Eldoret\u2013Bungoma Road, A1 Bungoma\u2013Kitale Road"}, {"id": 40, "name": "Busia", "capital": "Busia Town", "population": "893,681", "area": "1,670.3 km\u00b2", "governor": "Paul Otuoma", "languages": ["Teso", "Samia", "Swahili", "English"], "tribes": ["Teso", "Samia", "Luhya", "Luo"], "economy": ["Cross-border trade", "Fishing", "Sugarcane", "Agriculture"], "tourism": ["Busia Cross-border Market", "Budalangi floodplains"], "gallery": [], "history": "Busia County sits on the Kenya-Uganda border, making it a major cross-border trade hub. The Busia border post is one of the busiest in East Africa for goods transit between Kenya and Uganda.", "funFact": "The Busia border between Kenya and Uganda is one of the busiest land borders in East Africa, handling goods worth hundreds of millions of dollars annually.", "nationalParks": [], "universities": [], "hospitals": ["Busia County Referral Hospital"], "climate": "Hot and humid. Rainfall 1200\u20131800mm.", "coordinates": {"lat": 0.4607, "lng": 34.1117}, "majorTowns": ["Busia", "Malaba", "Butula", "Funyula", "Budalangi"], "wikipedia": "https://en.wikipedia.org/wiki/Busia_County", "googleMaps": "https://maps.google.com/?q=Busia+County+Kenya", "roadNetwork": "A1 Kisumu\u2013Busia\u2013Uganda Road"}, {"id": 41, "name": "Siaya", "capital": "Siaya Town", "population": "993,183", "area": "2,530.4 km\u00b2", "governor": "James Orengo", "languages": ["Dholuo (Luo)", "Swahili", "English"], "tribes": ["Luo"], "economy": ["Fishing", "Subsistence farming", "Remittances"], "tourism": ["Lake Victoria", "Kogelo (Obama's ancestral home)", "Ndere Island NP"], "gallery": [], "history": "Siaya County is the ancestral home of the Luo people and of Barack Obama's father, Barack Obama Sr. The county has produced many of Kenya's leading intellectuals, politicians, and civil society leaders.", "funFact": "Kogelo village in Siaya County is the ancestral home of Barack Obama, the 44th President of the United States, whose father was from here.", "nationalParks": ["Ndere Island National Park"], "universities": ["Rongo University (satellite)"], "hospitals": ["Siaya County Referral Hospital"], "climate": "Tropical lakeside. Hot and humid. Rainfall 1000\u20131800mm.", "coordinates": {"lat": 0.0608, "lng": 34.2884}, "majorTowns": ["Siaya", "Bondo", "Ugunja", "Ukwala", "Yala"], "wikipedia": "https://en.wikipedia.org/wiki/Siaya_County", "googleMaps": "https://maps.google.com/?q=Siaya+County+Kenya", "roadNetwork": "B1 Kisumu\u2013Bondo Road, C24 Siaya\u2013Ugunja Road"}, {"id": 42, "name": "Kisumu", "capital": "Kisumu City", "population": "1,155,574", "area": "2,085.9 km\u00b2", "governor": "Anyang' Nyong'o", "languages": ["Dholuo (Luo)", "Swahili", "English"], "tribes": ["Luo"], "economy": ["Fishing", "Trade", "Port", "Manufacturing", "Tourism"], "tourism": ["Lake Victoria", "Kisumu Museum", "Hippo Point", "Kit Mikayi"], "gallery": [], "history": "Kisumu is Kenya's third largest city and the main port on Lake Victoria. Founded in 1901 as the terminus of the Uganda Railway, it grew into a commercial hub for the Lake Victoria region.", "funFact": "Kisumu is one of the largest inland freshwater ports in the world, positioned on Lake Victoria \u2014 Africa's largest lake.", "nationalParks": ["Kisumu Impala Sanctuary"], "universities": ["Maseno University", "Jaramogi Oginga Odinga University"], "hospitals": ["Jaramogi Oginga Odinga Teaching & Referral Hospital"], "climate": "Hot and humid lakeside. Rainfall 1200\u20131800mm.", "coordinates": {"lat": -0.1022, "lng": 34.7617}, "majorTowns": ["Kisumu City", "Ahero", "Muhoroni", "Maseno"], "wikipedia": "https://en.wikipedia.org/wiki/Kisumu_County", "googleMaps": "https://maps.google.com/?q=Kisumu+County+Kenya", "roadNetwork": "A1 Nairobi\u2013Kisumu Road, B1 Kisumu\u2013Busia Road"}, {"id": 43, "name": "Homa Bay", "capital": "Homa Bay Town", "population": "1,131,950", "area": "3,154.7 km\u00b2", "governor": "Gladys Wanga", "languages": ["Dholuo (Luo)", "Swahili", "English"], "tribes": ["Luo"], "economy": ["Fishing", "Agriculture", "Tourism"], "tourism": ["Ruma National Park", "Mfangano Island", "Thimlich Ohinga (UNESCO)"], "gallery": [], "history": "Homa Bay County has a spectacular Lake Victoria shoreline. Thimlich Ohinga, a UNESCO World Heritage Site in the county, is a dry stone-walled structure built by Bantu settlers in the 16th century.", "funFact": "Thimlich Ohinga in Homa Bay is a UNESCO World Heritage Site \u2014 a remarkable dry-stone walled complex that is the largest and best preserved of its kind in East Africa.", "nationalParks": ["Ruma National Park"], "universities": [], "hospitals": ["Homa Bay County Teaching & Referral Hospital"], "climate": "Hot and humid. Lake Victoria influence. Rainfall 1000\u20131600mm.", "coordinates": {"lat": -0.523, "lng": 34.457}, "majorTowns": ["Homa Bay", "Oyugis", "Mbita", "Ndhiwa"], "wikipedia": "https://en.wikipedia.org/wiki/Homa_Bay_County", "googleMaps": "https://maps.google.com/?q=Homa+Bay+County+Kenya", "roadNetwork": "B1 Kisumu\u2013Homa Bay Road, C19 Homa Bay\u2013Migori Road"}, {"id": 44, "name": "Migori", "capital": "Migori Town", "population": "1,116,436", "area": "2,586.4 km\u00b2", "governor": "Ochillo Ayacko", "languages": ["Dholuo", "Kuria", "Swahili", "English"], "tribes": ["Luo", "Kuria", "Suba"], "economy": ["Gold mining", "Agriculture", "Fishing", "Cross-border trade"], "tourism": ["Ruma NP (partial)", "Macalder Gold Mines"], "gallery": [], "history": "Migori borders Tanzania and has strong cross-border trade ties. Gold mining is central to the local economy, and artisanal miners have worked the area for generations. The Kuria people straddle the Kenya-Tanzania border.", "funFact": "Migori County is one of Kenya's top gold-producing regions, with artisanal miners extracting gold near the Tanzania border using traditional methods.", "nationalParks": ["Ruma National Park (partial)"], "universities": ["Rongo University"], "hospitals": ["Migori County Referral Hospital"], "climate": "Tropical. Hot with moderate rainfall 1000\u20131500mm.", "coordinates": {"lat": -1.0634, "lng": 34.4731}, "majorTowns": ["Migori", "Rongo", "Awendo", "Suna", "Isebania"], "wikipedia": "https://en.wikipedia.org/wiki/Migori_County", "googleMaps": "https://maps.google.com/?q=Migori+County+Kenya", "roadNetwork": "A1 Kisumu\u2013Isebania\u2013Tanzania Road, B1 Migori\u2013Homa Bay Road"}, {"id": 45, "name": "Kisii", "capital": "Kisii Town", "population": "1,266,860", "area": "1,317.5 km\u00b2", "governor": "Simba Arati", "languages": ["Gusii (Ekegusii)", "Swahili", "English"], "tribes": ["Gusii (Kisii)"], "economy": ["Tea", "Maize", "Banana", "Soapstone carving", "Trade"], "tourism": ["Gusii Highlands", "Soapstone Carving Centers", "Tabaka Hills"], "gallery": [], "history": "Kisii County is home to the Gusii (Kisii) people, famous for their soapstone carvings exported worldwide. The county is densely populated and lies in one of Kenya's most fertile highlands.", "funFact": "Kisii soapstone carvings are among Kenya's most recognizable export handicrafts, sold in markets worldwide from New York to Tokyo.", "nationalParks": [], "universities": ["Kisii University"], "hospitals": ["Kisii Teaching and Referral Hospital"], "climate": "Cool and wet highland. Rainfall 1500\u20132000mm.", "coordinates": {"lat": -0.6817, "lng": 34.7667}, "majorTowns": ["Kisii", "Ogembo", "Keroka", "Suneka", "Nyamache"], "wikipedia": "https://en.wikipedia.org/wiki/Kisii_County", "googleMaps": "https://maps.google.com/?q=Kisii+County+Kenya", "roadNetwork": "A1 Kisumu\u2013Kisii\u2013Nairobi Road, B1 Kisii\u2013Homa Bay Road"}, {"id": 46, "name": "Nyamira", "capital": "Nyamira Town", "population": "605,576", "area": "900.2 km\u00b2", "governor": "Amos Nyaribo", "languages": ["Gusii (Ekegusii)", "Swahili", "English"], "tribes": ["Gusii (Kisii)"], "economy": ["Tea", "Maize", "Banana", "Coffee"], "tourism": ["Manga Ridge", "Itumbe Hills"], "gallery": [], "history": "Nyamira County was carved from Kisii County in 2013. It is one of Kenya's smallest counties and shares the Gusii culture. The Manga Ridge forms a scenic highland backdrop.", "funFact": "Nyamira County is one of Kenya's youngest counties, having been created from Kisii County in 2013 when Kenya transitioned to a devolved system of government.", "nationalParks": [], "universities": [], "hospitals": ["Nyamira County Referral Hospital"], "climate": "Cool and wet. Rainfall 1400\u20132000mm.", "coordinates": {"lat": -0.5671, "lng": 34.935}, "majorTowns": ["Nyamira", "Keroka", "Manga", "Nyansiongo"], "wikipedia": "https://en.wikipedia.org/wiki/Nyamira_County", "googleMaps": "https://maps.google.com/?q=Nyamira+County+Kenya", "roadNetwork": "B1 Kisii\u2013Nyamira Road"}, {"id": 47, "name": "Nairobi", "capital": "Nairobi City", "population": "4,397,073", "area": "696.1 km\u00b2", "governor": "Johnson Sakaja", "languages": ["Swahili", "English", "Sheng", "Multiple"], "tribes": ["All 42+ tribes of Kenya"], "economy": ["Finance", "Technology", "Manufacturing", "Trade", "Diplomacy"], "tourism": ["Nairobi National Park", "Giraffe Centre", "Bomas of Kenya", "Karen Blixen Museum", "David Sheldrick"], "gallery": [], "history": "Nairobi is East Africa's largest city and Kenya's capital. It began as a railway camp in 1899 and grew into a global hub. It is the only capital city in the world with a national park within its boundaries.", "funFact": "Nairobi National Park, just minutes from the city center, is the only national park in the world within a capital city \u2014 lions, rhinos, and giraffes roam against a skyline backdrop.", "nationalParks": ["Nairobi National Park", "Karura Forest Reserve"], "universities": ["University of Nairobi", "Kenyatta University", "Strathmore University", "USIU-Africa", "Daystar University"], "hospitals": ["Kenyatta National Hospital", "Nairobi Hospital", "Aga Khan University Hospital"], "climate": "Pleasant highland climate. Temperature 13\u201325\u00b0C. Rainfall 600\u20131200mm.", "coordinates": {"lat": -1.2921, "lng": 36.8219}, "majorTowns": ["CBD", "Westlands", "Karen", "Eastleigh", "Langata", "Embakasi"], "wikipedia": "https://en.wikipedia.org/wiki/Nairobi_County", "googleMaps": "https://maps.google.com/?q=Nairobi+County+Kenya", "roadNetwork": "Hub of Kenya's road network; Thika Superhighway, Southern Bypass, Eastern Bypass, Northern Bypass"}]};
+window.__MAP_SVG__ = "<svg id=\"kenya-svg-map\" viewBox=\"0 0 800 900\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Interactive map of Kenya's 47 counties\">\n  <defs>\n    <filter id=\"county-glow\">\n      <feGaussianBlur stdDeviation=\"3\" result=\"coloredBlur\"/>\n      <feMerge><feMergeNode in=\"coloredBlur\"/><feMergeNode in=\"SourceGraphic\"/></feMerge>\n    </filter>\n    <filter id=\"county-shadow\">\n      <feDropShadow dx=\"2\" dy=\"4\" stdDeviation=\"4\" flood-color=\"rgba(0,0,0,0.3)\"/>\n    </filter>\n    <clipPath id=\"kenya-clip\">\n      <path d=\"M 46.62,38.45 L 215.79,65.35 L 366.17,105.7 L 516.54,96.73 L 704.51,87.76 L 737.41,208.81 L 732.71,334.34 L 728.01,459.86 L 737.41,531.59 L 760.9,589.87 L 690.41,625.74 L 643.42,661.6 L 605.83,724.37 L 577.63,796.1 L 549.44,836.45 L 530.64,861.55 L 441.35,791.61 L 356.77,715.4 L 215.79,621.26 L 93.61,540.56 L 46.62,482.28 L 39.1,437.45 L 51.32,388.13 L 60.71,325.37 L 70.11,253.64 L 79.51,181.91 L 93.61,119.15 L 107.71,74.31 L 46.62,38.45 Z\"/>\n    </clipPath>\n  </defs>\n\n  <g id=\"counties-group\" clip-path=\"url(#kenya-clip)\">\n    <path id=\"county-1\" class=\"county\" data-id=\"1\" data-name=\"Mombasa\"\n      d=\"M 507.31,777.94 L 570.12,806.85 L 577.63,796.1 L 585.22,776.8 L 520.24,749.52 L 507.31,777.94 Z\"\n      fill=\"#2E7D32\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-2\" class=\"county\" data-id=\"2\" data-name=\"Kwale\"\n      d=\"M 507.31,777.94 L 476.4,819.07 L 530.64,861.55 L 570.12,806.85 L 507.31,777.94 Z\"\n      fill=\"#1976D2\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-3\" class=\"county\" data-id=\"3\" data-name=\"Kilifi\"\n      d=\"M 520.24,749.52 L 585.22,776.8 L 605.83,724.37 L 627.75,687.77 L 594.02,664.51 L 532.29,654.99 L 520.24,749.52 Z\"\n      fill=\"#FFB300\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-4\" class=\"county\" data-id=\"4\" data-name=\"Tana River\"\n      d=\"M 532.29,654.99 L 594.02,664.51 L 731.76,488.53 L 730.1,475.84 L 519.39,558.47 L 516.12,618.52 L 526.94,649.85 L 532.29,654.99 Z\"\n      fill=\"#D81B60\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-5\" class=\"county\" data-id=\"5\" data-name=\"Lamu\"\n      d=\"M 594.02,664.51 L 627.75,687.77 L 643.42,661.6 L 690.41,625.74 L 760.9,589.87 L 737.41,531.59 L 731.76,488.53 L 594.02,664.51 Z\"\n      fill=\"#6A1B9A\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-6\" class=\"county\" data-id=\"6\" data-name=\"Taita-Taveta\"\n      d=\"M 507.31,777.94 L 520.24,749.52 L 532.29,654.99 L 526.94,649.85 L 365.04,722.86 L 441.35,791.61 L 476.4,819.07 L 507.31,777.94 Z\"\n      fill=\"#00897B\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-7\" class=\"county\" data-id=\"7\" data-name=\"Garissa\"\n      d=\"M 498.16,398.43 L 482.69,463.21 L 481.33,487.31 L 519.39,558.47 L 730.1,475.84 L 728.01,459.86 L 729.87,410.03 L 509.9,366.94 L 498.16,398.43 Z\"\n      fill=\"#F57F17\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-8\" class=\"county\" data-id=\"8\" data-name=\"Wajir\"\n      d=\"M 509.9,366.94 L 729.87,410.03 L 736.22,240.5 L 549.89,144.15 L 496.28,341.57 L 509.9,366.94 Z\"\n      fill=\"#558B2F\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-9\" class=\"county\" data-id=\"9\" data-name=\"Mandera\"\n      d=\"M 549.89,144.15 L 736.22,240.5 L 737.41,208.81 L 704.51,87.76 L 530.09,96.08 L 549.89,144.15 Z\"\n      fill=\"#5D4037\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-10\" class=\"county\" data-id=\"10\" data-name=\"Marsabit\"\n      d=\"M 417.72,324.65 L 496.28,341.57 L 549.89,144.15 L 530.09,96.08 L 366.17,105.7 L 339.99,98.67 L 300.33,225.6 L 417.72,324.65 Z\"\n      fill=\"#1565C0\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-11\" class=\"county\" data-id=\"11\" data-name=\"Isiolo\"\n      d=\"M 357.67,430.54 L 498.16,398.43 L 509.9,366.94 L 496.28,341.57 L 417.72,324.65 L 336.97,392.57 L 357.67,430.54 Z\"\n      fill=\"#C62828\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-12\" class=\"county\" data-id=\"12\" data-name=\"Meru\"\n      d=\"M 358.87,452.18 L 482.69,463.21 L 498.16,398.43 L 357.67,430.54 L 358.87,452.18 Z\"\n      fill=\"#4527A0\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-13\" class=\"county\" data-id=\"13\" data-name=\"Tharaka-Nithi\"\n      d=\"M 366.82,470.08 L 416.03,513.8 L 481.33,487.31 L 482.69,463.21 L 358.87,452.18 L 366.82,470.08 Z\"\n      fill=\"#00695C\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-14\" class=\"county\" data-id=\"14\" data-name=\"Embu\"\n      d=\"M 416.03,513.8 L 366.82,470.08 L 359.56,502.43 L 381.32,537.54 L 382.32,537.74 L 416.03,513.8 Z\"\n      fill=\"#EF6C00\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-15\" class=\"county\" data-id=\"15\" data-name=\"Kitui\"\n      d=\"M 382.32,537.74 L 394.39,600.86 L 516.12,618.52 L 519.39,558.47 L 481.33,487.31 L 416.03,513.8 L 382.32,537.74 Z\"\n      fill=\"#283593\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-16\" class=\"county\" data-id=\"16\" data-name=\"Machakos\"\n      d=\"M 357.32,634.03 L 394.39,600.86 L 382.32,537.74 L 347.9,542.43 L 342.58,547.37 L 324.63,584.21 L 357.32,634.03 Z\"\n      fill=\"#AD1457\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-17\" class=\"county\" data-id=\"17\" data-name=\"Makueni\"\n      d=\"M 334.46,700.5 L 356.77,715.4 L 365.04,722.86 L 526.94,649.85 L 516.12,618.52 L 394.39,600.86 L 357.32,634.03 L 334.46,700.5 Z\"\n      fill=\"#2E7D32\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-18\" class=\"county\" data-id=\"18\" data-name=\"Nyandarua\"\n      d=\"M 248.85,508.64 L 267.53,535.45 L 312.61,505.72 L 293.58,457.83 L 282.53,449.43 L 248.85,508.64 Z\"\n      fill=\"#0277BD\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-19\" class=\"county\" data-id=\"19\" data-name=\"Nyeri\"\n      d=\"M 312.61,505.72 L 314.51,506.11 L 337.81,489.98 L 343.84,461.53 L 293.58,457.83 L 312.61,505.72 Z\"\n      fill=\"#F9A825\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-20\" class=\"county\" data-id=\"20\" data-name=\"Kirinyaga\"\n      d=\"M 337.81,489.98 L 359.56,502.43 L 366.82,470.08 L 358.8,452.12 L 343.84,461.53 L 337.81,489.98 Z\"\n      fill=\"#6D4C41\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-21\" class=\"county\" data-id=\"21\" data-name=\"Murang'a\"\n      d=\"M 347.9,542.43 L 381.32,537.54 L 359.56,502.43 L 337.81,489.98 L 314.51,506.11 L 347.9,542.43 Z\"\n      fill=\"#2E7D32\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-22\" class=\"county\" data-id=\"22\" data-name=\"Kiambu\"\n      d=\"M 267.53,535.45 L 267.95,544.28 L 342.58,547.37 L 347.9,542.43 L 314.51,506.11 L 312.61,505.72 L 267.53,535.45 Z\"\n      fill=\"#1976D2\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-23\" class=\"county\" data-id=\"23\" data-name=\"Turkana\"\n      d=\"M 258.91,255.42 L 300.33,225.6 L 339.99,98.67 L 215.79,65.35 L 46.62,38.45 L 107.71,74.31 L 93.61,119.15 L 78.56,189.15 L 258.91,255.42 Z\"\n      fill=\"#FFB300\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-24\" class=\"county\" data-id=\"24\" data-name=\"West Pokot\"\n      d=\"M 190.97,325.35 L 242.84,304.47 L 258.91,255.42 L 78.56,189.15 L 63.32,305.49 L 190.97,325.35 Z\"\n      fill=\"#D81B60\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-25\" class=\"county\" data-id=\"25\" data-name=\"Samburu\"\n      d=\"M 242.84,304.47 L 298.41,392.23 L 336.97,392.57 L 417.72,324.65 L 300.33,225.6 L 258.91,255.42 L 242.84,304.47 Z\"\n      fill=\"#6A1B9A\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-26\" class=\"county\" data-id=\"26\" data-name=\"Trans-Nzoia\"\n      d=\"M 133.16,384.28 L 163.99,367.19 L 190.97,325.35 L 63.32,305.49 L 62.5,311.72 L 133.16,384.28 Z\"\n      fill=\"#00897B\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-27\" class=\"county\" data-id=\"27\" data-name=\"Uasin Gishu\"\n      d=\"M 201.91,434.4 L 202.87,433.4 L 203.02,429.21 L 163.99,367.19 L 133.16,384.28 L 133.04,386.32 L 138.38,398.54 L 201.91,434.4 Z\"\n      fill=\"#F57F17\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-28\" class=\"county\" data-id=\"28\" data-name=\"Elgeyo-Marakwet\"\n      d=\"M 190.97,325.35 L 163.99,367.19 L 203.02,429.21 L 241.59,305.49 L 190.97,325.35 Z\"\n      fill=\"#558B2F\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-29\" class=\"county\" data-id=\"29\" data-name=\"Nandi\"\n      d=\"M 135.25,438.89 L 147.56,453.17 L 201.84,434.4 L 138.38,398.54 L 131.82,428.02 L 135.25,438.89 Z\"\n      fill=\"#5D4037\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-30\" class=\"county\" data-id=\"30\" data-name=\"Baringo\"\n      d=\"M 241.59,305.49 L 203.02,429.21 L 202.87,433.4 L 277.27,433.6 L 298.41,392.23 L 242.84,304.47 L 241.59,305.49 Z\"\n      fill=\"#1565C0\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-31\" class=\"county\" data-id=\"31\" data-name=\"Laikipia\"\n      d=\"M 293.58,457.83 L 343.84,461.53 L 358.8,452.12 L 357.67,430.54 L 336.97,392.57 L 298.41,392.23 L 277.27,433.6 L 282.53,449.43 L 293.58,457.83 Z\"\n      fill=\"#C62828\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-32\" class=\"county\" data-id=\"32\" data-name=\"Nakuru\"\n      d=\"M 201.91,434.4 L 206.04,488.22 L 212.26,498.28 L 248.85,508.64 L 282.53,449.43 L 277.27,433.6 L 202.87,433.4 L 201.91,434.4 Z\"\n      fill=\"#4527A0\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-33\" class=\"county\" data-id=\"33\" data-name=\"Narok\"\n      d=\"M 260.63,578.72 L 267.95,544.28 L 267.53,535.45 L 248.85,508.64 L 212.26,498.28 L 164.16,587.15 L 222.41,625.68 L 260.63,578.72 Z\"\n      fill=\"#00695C\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-34\" class=\"county\" data-id=\"34\" data-name=\"Kajiado\"\n      d=\"M 357.32,634.03 L 324.63,584.21 L 260.63,578.72 L 222.41,625.68 L 334.46,700.5 L 357.32,634.03 Z\"\n      fill=\"#EF6C00\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-35\" class=\"county\" data-id=\"35\" data-name=\"Kericho\"\n      d=\"M 201.84,434.4 L 147.56,453.17 L 141.34,466.08 L 157.22,495.26 L 206.04,488.22 L 201.84,434.4 Z\"\n      fill=\"#283593\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-36\" class=\"county\" data-id=\"36\" data-name=\"Bomet\"\n      d=\"M 139.14,547.79 L 148.03,576.5 L 164.16,587.15 L 212.26,498.28 L 206.04,488.22 L 157.22,495.26 L 143.14,523.41 L 139.14,547.79 Z\"\n      fill=\"#AD1457\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-37\" class=\"county\" data-id=\"37\" data-name=\"Kakamega\"\n      d=\"M 93.7,422.58 L 131.82,428.02 L 138.38,398.54 L 133.04,386.32 L 90.89,416.42 L 93.7,422.58 Z\"\n      fill=\"#2E7D32\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-38\" class=\"county\" data-id=\"38\" data-name=\"Vihiga\"\n      d=\"M 94.65,447.79 L 135.25,438.89 L 131.82,428.02 L 93.7,422.58 L 94.65,447.79 Z\"\n      fill=\"#0277BD\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-39\" class=\"county\" data-id=\"39\" data-name=\"Bungoma\"\n      d=\"M 90.89,416.42 L 133.04,386.32 L 133.16,384.28 L 62.5,311.72 L 61.49,319.47 L 81.51,411.1 L 90.89,416.42 Z\"\n      fill=\"#F9A825\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-40\" class=\"county\" data-id=\"40\" data-name=\"Busia\"\n      d=\"M 81.51,411.1 L 61.49,319.47 L 51.32,388.13 L 40.97,429.87 L 81.51,411.1 Z\"\n      fill=\"#6D4C41\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-41\" class=\"county\" data-id=\"41\" data-name=\"Siaya\"\n      d=\"M 90.66,459.92 L 94.65,447.79 L 93.7,422.58 L 90.89,416.42 L 81.51,411.1 L 40.97,429.87 L 39.1,437.45 L 45.18,473.69 L 90.66,459.92 Z\"\n      fill=\"#2E7D32\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-42\" class=\"county\" data-id=\"42\" data-name=\"Kisumu\"\n      d=\"M 90.66,459.92 L 113.24,477.06 L 141.34,466.08 L 147.56,453.17 L 135.25,438.89 L 94.65,447.79 L 90.66,459.92 Z\"\n      fill=\"#1976D2\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-43\" class=\"county\" data-id=\"43\" data-name=\"Homa Bay\"\n      d=\"M 45.18,473.69 L 46.62,482.28 L 71.89,513.63 L 95.84,512.88 L 113.24,477.06 L 90.66,459.92 L 45.18,473.69 Z\"\n      fill=\"#FFB300\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-44\" class=\"county\" data-id=\"44\" data-name=\"Migori\"\n      d=\"M 139.14,547.79 L 95.84,512.88 L 71.89,513.63 L 93.61,540.56 L 148.03,576.5 L 139.14,547.79 Z\"\n      fill=\"#D81B60\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-45\" class=\"county\" data-id=\"45\" data-name=\"Kisii\"\n      d=\"M 143.14,523.41 L 113.22,477.34 L 95.84,512.88 L 139.14,547.79 L 143.14,523.41 Z\"\n      fill=\"#6A1B9A\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-46\" class=\"county\" data-id=\"46\" data-name=\"Nyamira\"\n      d=\"M 141.34,466.08 L 113.22,477.34 L 143.14,523.41 L 157.22,495.26 L 141.34,466.08 Z\"\n      fill=\"#00897B\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n    <path id=\"county-47\" class=\"county\" data-id=\"47\" data-name=\"Nairobi\"\n      d=\"M 260.63,578.72 L 324.63,584.21 L 342.58,547.37 L 267.95,544.28 L 260.63,578.72 Z\"\n      fill=\"#F57F17\" stroke=\"#fff\" stroke-width=\"1.2\"/>\n  </g>\n  <path id=\"kenya-outline\" d=\"M 46.62,38.45 L 215.79,65.35 L 366.17,105.7 L 516.54,96.73 L 704.51,87.76 L 737.41,208.81 L 732.71,334.34 L 728.01,459.86 L 737.41,531.59 L 760.9,589.87 L 690.41,625.74 L 643.42,661.6 L 605.83,724.37 L 577.63,796.1 L 549.44,836.45 L 530.64,861.55 L 441.35,791.61 L 356.77,715.4 L 215.79,621.26 L 93.61,540.56 L 46.62,482.28 L 39.1,437.45 L 51.32,388.13 L 60.71,325.37 L 70.11,253.64 L 79.51,181.91 L 93.61,119.15 L 107.71,74.31 L 46.62,38.45 Z\" fill=\"none\" stroke=\"#1A1D23\" stroke-width=\"2.2\" stroke-linejoin=\"round\" pointer-events=\"none\" opacity=\"0.55\"/>\n  <!-- Labels intentionally omitted from the SVG; rendered as HTML tooltips on hover/click -->\n</svg>";
+</script>
+<script>
+const PC = {};
+
+/* ===== utils.js ===== */
+PC.utils = (function() {
+/**
+ * utils.js — Shared utility functions for Project Culture
+ */
+
+/**
+ * Debounce a function call
+ * @param {Function} fn
+ * @param {number} delay
+ */
+function debounce(fn, delay = 250) {
+  let timer = null;
+  return function debounced(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+/**
+ * Clamp a number between min and max
+ */
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+/**
+ * Format a large number with commas
+ */
+function formatNumber(num) {
+  if (typeof num === 'string') {
+    const parsed = parseInt(num.replace(/,/g, ''), 10);
+    if (!isNaN(parsed)) return parsed.toLocaleString('en-US');
+    return num;
+  }
+  return num.toLocaleString('en-US');
+}
+
+/**
+ * Parse population string to number (handles commas)
+ */
+function parsePopulation(str) {
+  if (typeof str === 'number') return str;
+  return parseInt(String(str).replace(/,/g, ''), 10) || 0;
+}
+
+/**
+ * Parse area string (e.g. "229.9 km²") to number
+ */
+function parseArea(str) {
+  if (typeof str === 'number') return str;
+  const match = String(str).match(/[\d,]+\.?\d*/);
+  return match ? parseFloat(match[0].replace(/,/g, '')) : 0;
+}
+
+/**
+ * Simple fuzzy match: checks if query characters appear in order within target
+ */
+function fuzzyMatch(query, target) {
+  const q = query.toLowerCase();
+  const t = target.toLowerCase();
+  if (t.includes(q)) return true;
+  let qi = 0;
+  for (let ti = 0; ti < t.length && qi < q.length; ti++) {
+    if (t[ti] === q[qi]) qi++;
+  }
+  return qi === q.length;
+}
+
+/**
+ * Calculate distance between two lat/lng points (Haversine, in km)
+ */
+function haversineDistance(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+function toRad(deg) {
+  return (deg * Math.PI) / 180;
+}
+
+/**
+ * Find N nearest counties to a given county by coordinates
+ */
+function findNearestCounties(county, allCounties, n = 4) {
+  return allCounties
+    .filter(c => c.id !== county.id)
+    .map(c => ({
+      county: c,
+      distance: haversineDistance(
+        county.coordinates.lat, county.coordinates.lng,
+        c.coordinates.lat, c.coordinates.lng
+      )
+    }))
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, n)
+    .map(item => item.county);
+}
+
+/**
+ * Escape HTML to prevent injection when rendering dynamic data
+ */
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/**
+ * Generate a simple SVG-safe id from a name
+ */
+function slugify(str) {
+  return String(str).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+/**
+ * Wait helper (for orchestrating animation sequences)
+ */
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Get a random integer between min (inclusive) and max (inclusive)
+ */
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
+ * Pick a random item from an array
+ */
+function randomItem(arr) {
+  return arr[randomInt(0, arr.length - 1)];
+}
+
+/**
+ * Shuffle an array (Fisher-Yates), returns a new array
+ */
+function shuffle(arr) {
+  const result = [...arr];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = randomInt(0, i);
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+return { debounce, clamp, formatNumber, parsePopulation, parseArea, fuzzyMatch, haversineDistance, findNearestCounties, escapeHtml, slugify, wait, randomInt, randomItem, shuffle };
+})();
+
+/* ===== storage.js ===== */
+PC.storage = (function() {
+/**
+ * storage.js — Persistent state management (favorites, recently viewed, theme, recent searches)
+ * Uses localStorage with a namespaced key and graceful fallback to in-memory store
+ * if localStorage is unavailable (e.g. private browsing restrictions).
+ */
+
+const NAMESPACE = 'projectCulture';
+
+/** In-memory fallback store, used if localStorage throws */
+const memoryStore = {};
+
+function isStorageAvailable() {
+  try {
+    const testKey = '__pc_test__';
+    window.localStorage.setItem(testKey, '1');
+    window.localStorage.removeItem(testKey);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+const STORAGE_OK = isStorageAvailable();
+
+function getKey(key) {
+  return `${NAMESPACE}:${key}`;
+}
+
+function get(key, fallback = null) {
+  try {
+    if (STORAGE_OK) {
+      const raw = window.localStorage.getItem(getKey(key));
+      return raw !== null ? JSON.parse(raw) : fallback;
+    }
+    return key in memoryStore ? memoryStore[key] : fallback;
+  } catch (e) {
+    return fallback;
+  }
+}
+
+function set(key, value) {
+  try {
+    if (STORAGE_OK) {
+      window.localStorage.setItem(getKey(key), JSON.stringify(value));
+    } else {
+      memoryStore[key] = value;
+    }
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+/* ===================== Favorites ===================== */
+
+function getFavorites() {
+  return get('favorites', []);
+}
+
+function isFavorite(countyId) {
+  return getFavorites().includes(countyId);
+}
+
+function toggleFavorite(countyId) {
+  const favs = getFavorites();
+  const idx = favs.indexOf(countyId);
+  if (idx === -1) {
+    favs.push(countyId);
+  } else {
+    favs.splice(idx, 1);
+  }
+  set('favorites', favs);
+  return favs.includes(countyId);
+}
+
+/* ===================== Recently Viewed ===================== */
+
+function getRecentlyViewed() {
+  return get('recentlyViewed', []);
+}
+
+function addRecentlyViewed(countyId) {
+  let recent = getRecentlyViewed();
+  recent = recent.filter(id => id !== countyId);
+  recent.unshift(countyId);
+  recent = recent.slice(0, 8);
+  set('recentlyViewed', recent);
+  return recent;
+}
+
+/* ===================== Recent Searches ===================== */
+
+function getRecentSearches() {
+  return get('recentSearches', []);
+}
+
+function addRecentSearch(query) {
+  if (!query || !query.trim()) return getRecentSearches();
+  let recent = getRecentSearches();
+  recent = recent.filter(q => q.toLowerCase() !== query.toLowerCase());
+  recent.unshift(query);
+  recent = recent.slice(0, 5);
+  set('recentSearches', recent);
+  return recent;
+}
+
+function clearRecentSearches() {
+  set('recentSearches', []);
+}
+
+/* ===================== Theme ===================== */
+
+function getTheme() {
+  return get('theme', null);
+}
+
+function setTheme(theme) {
+  set('theme', theme);
+}
+
+/* ===================== Quiz Stats ===================== */
+
+function getQuizBestScore() {
+  return get('quizBestScore', 0);
+}
+
+function setQuizBestScore(score) {
+  const best = getQuizBestScore();
+  if (score > best) {
+    set('quizBestScore', score);
+    return true; // new record
+  }
+  return false;
+}
+
+return { getFavorites, isFavorite, toggleFavorite, getRecentlyViewed, addRecentlyViewed, getRecentSearches, addRecentSearch, clearRecentSearches, getTheme, setTheme, getQuizBestScore, setQuizBestScore };
+})();
+
+/* ===== api.js ===== */
+PC.api = (function() {
+/**
+ * api.js — Data access layer. Loads county data (JSON) and the SVG map.
+ * Centralizing fetch logic here means UI modules never talk to the network directly.
+ */
+
+let cachedCounties = null;
+
+/**
+ * Load all county data from data/counties.json
+ * Returns a Promise resolving to an array of county objects.
+ */
+async function loadCounties() {
+  if (cachedCounties) return cachedCounties;
+  cachedCounties = window.__COUNTIES_DATA__.counties;
+  return cachedCounties;
+}
+
+/**
+ * Load the SVG map markup as a string, ready for injection into the DOM.
+ */
+async function loadMapSVG() {
+  return window.__MAP_SVG__;
+}
+
+/**
+ * Get a single county by its numeric ID.
+ */
+function getCountyById(id) {
+  if (!cachedCounties) return null;
+  return cachedCounties.find(c => c.id === Number(id)) || null;
+}
+
+/**
+ * Get all cached counties synchronously (must call loadCounties() first).
+ */
+function getAllCounties() {
+  return cachedCounties || [];
+}
+
+/**
+ * Compute basic national statistics from county data.
+ */
+function computeStatistics(counties) {
+  const totalPopulation = counties.reduce((sum, c) => {
+    const pop = parseInt(String(c.population).replace(/,/g, ''), 10);
+    return sum + (isNaN(pop) ? 0 : pop);
+  }, 0);
+
+  const byArea = [...counties].sort((a, b) => {
+    const areaA = parseFloat(String(a.area).replace(/[^\d.]/g, ''));
+    const areaB = parseFloat(String(b.area).replace(/[^\d.]/g, ''));
+    return areaB - areaA;
+  });
+
+  const largestCounty = byArea[0];
+  const smallestCounty = byArea[byArea.length - 1];
+
+  const totalNationalParks = counties.reduce(
+    (sum, c) => sum + (c.nationalParks ? c.nationalParks.length : 0),
+    0
+  );
+
+  return {
+    totalCounties: counties.length,
+    totalPopulation,
+    largestCounty,
+    smallestCounty,
+    totalNationalParks,
+    highestMountain: 'Mount Kenya (5,199m)',
+    longestRiver: 'Tana River (1,000km)',
+    unescoSites: 5
+  };
+}
+
+return { loadCounties, loadMapSVG, getCountyById, getAllCounties, computeStatistics };
+})();
+
+/* ===== ui.js ===== */
+PC.ui = (function() {
+/**
+ * ui.js — General UI utilities: toasts, scroll reveal, navbar behavior,
+ * statistics dashboard rendering, canvas charts, theme toggling, favorites bar.
+ */
+
+const { formatNumber, parsePopulation, escapeHtml } = PC.utils;
+const { getTheme, setTheme, getFavorites, toggleFavorite, isFavorite } = PC.storage;
+/* ===================== Toasts ===================== */
+
+let toastContainer = null;
+
+function initToasts() {
+  toastContainer = document.getElementById('toast-container');
+}
+
+function showToast(message, duration = 2600) {
+  if (!toastContainer) return;
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  toastContainer.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('toast--out');
+    toast.addEventListener('animationend', () => toast.remove(), { once: true });
+  }, duration);
+}
+
+/* ===================== Scroll Reveal ===================== */
+
+function initScrollReveal() {
+  const elements = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window) || elements.length === 0) {
+    elements.forEach(el => el.classList.add('is-visible'));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+  );
+
+  elements.forEach(el => observer.observe(el));
+}
+
+/* ===================== Navbar scroll state + scroll-to-top ===================== */
+
+function initNavbarScroll() {
+  const navbar = document.getElementById('navbar');
+  const scrollTopBtn = document.getElementById('scroll-top');
+  if (!navbar) return;
+
+  let lastY = window.scrollY;
+
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    navbar.style.boxShadow = y > 8 ? 'var(--shadow-sm)' : 'none';
+
+    if (scrollTopBtn) {
+      scrollTopBtn.classList.toggle('is-visible', y > 600);
+    }
+    lastY = y;
+  }, { passive: true });
+
+  if (scrollTopBtn) {
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+}
+
+/* ===================== Smooth scroll for nav links ===================== */
+
+function initSmoothScrollLinks() {
+  document.querySelectorAll('[data-scroll-to]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = el.getAttribute('data-scroll-to');
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+}
+
+/* ===================== Theme Toggle ===================== */
+
+function initThemeToggle() {
+  const toggleBtn = document.getElementById('theme-toggle');
+  const savedTheme = getTheme() || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  applyTheme(savedTheme);
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      setTheme(next);
+      showToast(next === 'dark' ? 'Dark mode enabled' : 'Light mode enabled');
+    });
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+}
+
+/* ===================== Fullscreen Toggle ===================== */
+
+function initFullscreenToggle() {
+  const btn = document.getElementById('fullscreen-toggle');
+  if (!btn) return;
+
+  btn.addEventListener('click', async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await document.getElementById('map-section').requestFullscreen();
+        showToast('Fullscreen mode enabled — press Esc to exit');
+      } else {
+        await document.exitFullscreen();
+      }
+    } catch (err) {
+      showToast('Fullscreen not supported on this device');
+    }
+  });
+}
+
+/* ===================== Statistics Dashboard ===================== */
+
+function renderStatistics(stats) {
+  const container = document.getElementById('stats-bar');
+  if (!container) return;
+
+  const items = [
+    { icon: '🗺️', value: stats.totalCounties, label: 'Total Counties' },
+    { icon: '👥', value: formatNumber(stats.totalPopulation), label: 'Population' },
+    { icon: '📏', value: stats.largestCounty.name, label: 'Largest County' },
+    { icon: '📐', value: stats.smallestCounty.name, label: 'Smallest County' },
+    { icon: '⛰️', value: 'Mt. Kenya', label: 'Highest Mountain' },
+    { icon: '🌊', value: 'Tana River', label: 'Longest River' },
+    { icon: '🦁', value: stats.totalNationalParks + '+', label: 'National Parks' },
+    { icon: '🏛️', value: stats.unescoSites, label: 'UNESCO Sites' }
+  ];
+
+  container.innerHTML = items.map(item => `
+    <div class="stat-card reveal">
+      <div class="stat-card__icon">${item.icon}</div>
+      <div class="stat-card__value">${escapeHtml(String(item.value))}</div>
+      <div class="stat-card__label">${escapeHtml(item.label)}</div>
+    </div>
+  `).join('');
+
+  initScrollReveal();
+}
+
+/* ===================== Population Chart (Canvas, no libraries) ===================== */
+
+function renderPopulationChart(counties, canvasId = 'population-chart') {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const cssWidth = canvas.clientWidth || 600;
+  const cssHeight = canvas.clientHeight || 300;
+  canvas.width = cssWidth * dpr;
+  canvas.height = cssHeight * dpr;
+  ctx.scale(dpr, dpr);
+
+  const top10 = [...counties]
+    .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
+    .slice(0, 10);
+
+  const max = parsePopulation(top10[0].population);
+  const padding = { top: 20, right: 16, bottom: 70, left: 16 };
+  const chartWidth = cssWidth - padding.left - padding.right;
+  const chartHeight = cssHeight - padding.top - padding.bottom;
+  const barWidth = chartWidth / top10.length;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+  ctx.clearRect(0, 0, cssWidth, cssHeight);
+
+  const colors = ['#2E7D32', '#1976D2', '#FFB300', '#D81B60', '#6A1B9A', '#00897B', '#F57F17', '#558B2F', '#5D4037', '#1565C0'];
+
+  top10.forEach((county, i) => {
+    const value = parsePopulation(county.population);
+    const barHeight = (value / max) * chartHeight;
+    const x = padding.left + i * barWidth + barWidth * 0.15;
+    const y = padding.top + chartHeight - barHeight;
+    const w = barWidth * 0.7;
+
+    // bar with rounded top
+    const radius = 6;
+    ctx.beginPath();
+    ctx.moveTo(x, y + barHeight);
+    ctx.lineTo(x, y + radius);
+    ctx.arcTo(x, y, x + radius, y, radius);
+    ctx.lineTo(x + w - radius, y);
+    ctx.arcTo(x + w, y, x + w, y + radius, radius);
+    ctx.lineTo(x + w, y + barHeight);
+    ctx.closePath();
+    ctx.fillStyle = colors[i % colors.length];
+    ctx.fill();
+
+    // value label
+    ctx.fillStyle = isDark ? '#E6EDF3' : '#1A1D23';
+    ctx.font = '600 10px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    const valLabel = value >= 1000000 ? (value / 1000000).toFixed(1) + 'M' : (value / 1000).toFixed(0) + 'K';
+    ctx.fillText(valLabel, x + w / 2, y - 6);
+
+    // county label (rotated)
+    ctx.save();
+    ctx.translate(x + w / 2, padding.top + chartHeight + 12);
+    ctx.rotate(-Math.PI / 5);
+    ctx.fillStyle = isDark ? '#8B949E' : '#5A6272';
+    ctx.font = '500 10px Inter, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(county.name, 0, 0);
+    ctx.restore();
+  });
+}
+
+/* ===================== Favorites Bar ===================== */
+
+function renderFavoritesBar(counties, onSelectCounty) {
+  const container = document.getElementById('favorites-bar');
+  if (!container) return;
+
+  const favIds = getFavorites();
+  if (favIds.length === 0) {
+    container.innerHTML = `<p style="color:var(--clr-text-muted); font-size:var(--text-sm);">No favorites yet — click the ★ in a county panel to save it here.</p>`;
+    return;
+  }
+
+  const favCounties = favIds.map(id => counties.find(c => c.id === id)).filter(Boolean);
+
+  container.innerHTML = favCounties.map(c => `
+    <button class="nearby-county-chip" data-county-id="${c.id}" aria-label="View ${escapeHtml(c.name)}">
+      ★ ${escapeHtml(c.name)}
+    </button>
+  `).join('');
+
+  container.querySelectorAll('[data-county-id]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      onSelectCounty(parseInt(btn.dataset.countyId, 10));
+    });
+  });
+}
+
+/* ===================== Keyboard Shortcuts Modal ===================== */
+
+function initShortcutsModal() {
+  const modal = document.getElementById('shortcuts-modal');
+  const openBtn = document.getElementById('shortcuts-btn');
+  const closeBtn = document.getElementById('shortcuts-close');
+
+  if (openBtn && modal) {
+    openBtn.addEventListener('click', () => modal.classList.add('is-open'));
+  }
+  if (closeBtn && modal) {
+    closeBtn.addEventListener('click', () => modal.classList.remove('is-open'));
+  }
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('is-open');
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '?' && !isTyping(e.target)) {
+      modal?.classList.toggle('is-open');
+    }
+    if (e.key === 'Escape') {
+      modal?.classList.remove('is-open');
+    }
+  });
+}
+
+function isTyping(target) {
+  const tag = target.tagName ? target.tagName.toLowerCase() : '';
+  return tag === 'input' || tag === 'textarea';
+}
+
+return { initToasts, showToast, initScrollReveal, initNavbarScroll, initSmoothScrollLinks, initThemeToggle, initFullscreenToggle, renderStatistics, renderPopulationChart, renderFavoritesBar, initShortcutsModal };
+})();
+
+/* ===== animation.js ===== */
+PC.animation = (function() {
+/**
+ * animation.js — Orchestrated animation helpers (ripple effects, page transitions,
+ * loading sequences) that don't belong to a single component.
+ */
+
+/**
+ * Create a ripple effect at the click position within an element.
+ */
+function createRipple(event, element) {
+  const rect = element.getBoundingClientRect();
+  const ripple = document.createElement('span');
+  const size = Math.max(rect.width, rect.height);
+  const x = event.clientX - rect.left - size / 2;
+  const y = event.clientY - rect.top - size / 2;
+
+  Object.assign(ripple.style, {
+    position: 'absolute',
+    width: `${size}px`,
+    height: `${size}px`,
+    left: `${x}px`,
+    top: `${y}px`,
+    borderRadius: '50%',
+    background: 'rgba(255,255,255,0.5)',
+    pointerEvents: 'none',
+    animation: 'ripple 0.6s ease-out forwards'
+  });
+
+  element.style.position = element.style.position || 'relative';
+  element.style.overflow = 'hidden';
+  element.appendChild(ripple);
+
+  ripple.addEventListener('animationend', () => ripple.remove());
+}
+
+/**
+ * Attach ripple effect to all elements matching a selector.
+ */
+function attachRippleEffect(selector = '.btn') {
+  document.querySelectorAll(selector).forEach(el => {
+    el.addEventListener('click', (e) => createRipple(e, el));
+  });
+}
+
+/**
+ * Show a full-page loading overlay with skeleton, then fade out.
+ */
+function showLoadingSequence(containerId, durationMs = 600) {
+  return new Promise(resolve => {
+    const container = document.getElementById(containerId);
+    if (!container) return resolve();
+
+    container.classList.add('anim-fade-in');
+    setTimeout(resolve, durationMs);
+  });
+}
+
+/**
+ * Animate a numeric counter from 0 to target value.
+ */
+function animateCounter(element, targetValue, duration = 1200) {
+  const start = 0;
+  const startTime = performance.now();
+
+  function update(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3); // ease-out-cubic
+    const current = Math.floor(start + (targetValue - start) * eased);
+    element.textContent = current.toLocaleString('en-US');
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      element.textContent = targetValue.toLocaleString('en-US');
+    }
+  }
+
+  requestAnimationFrame(update);
+}
+
+/**
+ * Apply a staggered reveal class to a NodeList of elements.
+ */
+function staggerReveal(elements, baseDelay = 60) {
+  elements.forEach((el, i) => {
+    el.style.animationDelay = `${i * baseDelay}ms`;
+    el.classList.add('anim-fade-up');
+  });
+}
+
+return { createRipple, attachRippleEffect, showLoadingSequence, animateCounter, staggerReveal };
+})();
+
+/* ===== modal.js ===== */
+PC.modal = (function() {
+/**
+ * modal.js — The county information panel (sliding drawer).
+ * Renders detailed county data and handles open/close/favorite/share interactions.
+ */
+
+const { escapeHtml, formatNumber } = PC.utils;
+const { isFavorite, toggleFavorite, addRecentlyViewed } = PC.storage;
+const { showToast, renderFavoritesBar } = PC.ui;
+const { findNearestCounties } = PC.utils;
+let panelEl, overlayEl;
+let allCountiesRef = [];
+let onNavigateCallback = null;
+
+function initInfoPanel(allCounties, onNavigate) {
+  panelEl = document.getElementById('info-panel');
+  overlayEl = document.getElementById('overlay');
+  allCountiesRef = allCounties;
+  onNavigateCallback = onNavigate;
+
+  overlayEl?.addEventListener('click', closePanel);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closePanel();
+  });
+}
+
+function openCountyPanel(county) {
+  if (!panelEl) return;
+
+  addRecentlyViewed(county.id);
+  panelEl.innerHTML = renderPanelContent(county);
+  panelEl.classList.add('is-open');
+  overlayEl?.classList.add('is-visible');
+  panelEl.scrollTop = 0;
+
+  attachPanelEvents(county);
+}
+
+function closePanel() {
+  panelEl?.classList.remove('is-open');
+  overlayEl?.classList.remove('is-visible');
+  document.dispatchEvent(new CustomEvent('panel:closed'));
+}
+
+function renderPanelContent(c) {
+  const fav = isFavorite(c.id);
+  const nearby = findNearestCounties(c, allCountiesRef, 4);
+
+  return `
+    <div class="panel-header">
+      <button class="panel-header__close" id="panel-close-btn" aria-label="Close panel">✕</button>
+      <div class="panel-header__number">County No. ${String(c.id).padStart(2, '0')} of 47</div>
+      <h2 class="panel-header__name">${escapeHtml(c.name)}</h2>
+      <div class="panel-header__capital">📍 ${escapeHtml(c.capital)}</div>
+      <div class="panel-meta-chips">
+        <span class="meta-chip">👥 ${escapeHtml(formatNumber(c.population))}</span>
+        <span class="meta-chip">📐 ${escapeHtml(c.area)}</span>
+      </div>
+    </div>
+
+    <div class="panel-body">
+
+      <div class="panel-section">
+        <div style="display:flex; gap: var(--space-2);">
+          <button class="btn btn--primary" id="panel-fav-btn" style="flex:1;">
+            ${fav ? '★ Favorited' : '☆ Add to Favorites'}
+          </button>
+          <button class="btn btn--secondary btn--icon-lg" id="panel-share-btn" aria-label="Copy link">🔗</button>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section__title">📋 Quick Facts</div>
+        <div class="panel-grid">
+          <div class="panel-grid-item">
+            <div class="panel-grid-item__label">Governor</div>
+            <div class="panel-grid-item__value">${escapeHtml(c.governor)}</div>
+          </div>
+          <div class="panel-grid-item">
+            <div class="panel-grid-item__label">Capital</div>
+            <div class="panel-grid-item__value">${escapeHtml(c.capital)}</div>
+          </div>
+          <div class="panel-grid-item">
+            <div class="panel-grid-item__label">Population</div>
+            <div class="panel-grid-item__value">${escapeHtml(formatNumber(c.population))}</div>
+          </div>
+          <div class="panel-grid-item">
+            <div class="panel-grid-item__label">Area</div>
+            <div class="panel-grid-item__value">${escapeHtml(c.area)}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section__title">🗣️ Languages</div>
+        <div class="tag-list">
+          ${c.languages.map(l => `<span class="tag">${escapeHtml(l)}</span>`).join('')}
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section__title">👨‍👩‍👧‍👦 Ethnic Communities</div>
+        <div class="tag-list">
+          ${c.tribes.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section__title">🌦️ Climate</div>
+        <p class="panel-section__content">${escapeHtml(c.climate)}</p>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section__title">💼 Economic Activities</div>
+        <div class="tag-list">
+          ${c.economy.map(e => `<span class="tag">${escapeHtml(e)}</span>`).join('')}
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section__title">🏞️ Tourist Attractions</div>
+        <div class="tag-list">
+          ${c.tourism.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+        </div>
+      </div>
+
+      ${c.nationalParks && c.nationalParks.length ? `
+      <div class="panel-section">
+        <div class="panel-section__title">🦓 National Parks &amp; Reserves</div>
+        <div class="tag-list">
+          ${c.nationalParks.map(p => `<span class="tag">${escapeHtml(p)}</span>`).join('')}
+        </div>
+      </div>` : ''}
+
+      <div class="panel-section">
+        <div class="panel-section__title">🎓 Universities</div>
+        <p class="panel-section__content">${c.universities && c.universities.length ? escapeHtml(c.universities.join(', ')) : 'No major universities listed.'}</p>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section__title">🏥 Hospitals</div>
+        <p class="panel-section__content">${escapeHtml(c.hospitals.join(', '))}</p>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section__title">🛣️ Road Network</div>
+        <p class="panel-section__content">${escapeHtml(c.roadNetwork)}</p>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section__title">🏘️ Major Towns</div>
+        <div class="tag-list">
+          ${c.majorTowns.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section__title">📜 Historical Background</div>
+        <p class="panel-section__content">${escapeHtml(c.history)}</p>
+      </div>
+
+      <div class="panel-section">
+        <div class="fun-fact-box">
+          <strong>💡 Fun Fact</strong>
+          ${escapeHtml(c.funFact)}
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section__title">🧭 Nearby Counties</div>
+        <div class="tag-list">
+          ${nearby.map(n => `<button class="nearby-county-chip" data-nearby-id="${n.id}">${escapeHtml(n.name)}</button>`).join('')}
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section__title">📍 Coordinates</div>
+        <div class="panel-grid">
+          <div class="panel-grid-item">
+            <div class="panel-grid-item__label">Latitude</div>
+            <div class="panel-grid-item__value">${c.coordinates.lat.toFixed(4)}°</div>
+          </div>
+          <div class="panel-grid-item">
+            <div class="panel-grid-item__label">Longitude</div>
+            <div class="panel-grid-item__value">${c.coordinates.lng.toFixed(4)}°</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section__title">🔗 Learn More</div>
+        <div class="external-links">
+          <a class="external-link" href="${c.wikipedia}" target="_blank" rel="noopener noreferrer">📖 Wikipedia</a>
+          <a class="external-link" href="${c.googleMaps}" target="_blank" rel="noopener noreferrer">🗺️ Google Maps</a>
+        </div>
+      </div>
+
+    </div>
+  `;
+}
+
+function attachPanelEvents(county) {
+  document.getElementById('panel-close-btn')?.addEventListener('click', closePanel);
+
+  document.getElementById('panel-fav-btn')?.addEventListener('click', (e) => {
+    const nowFav = toggleFavorite(county.id);
+    e.target.textContent = nowFav ? '★ Favorited' : '☆ Add to Favorites';
+    showToast(nowFav ? `${county.name} added to favorites` : `${county.name} removed from favorites`);
+    renderFavoritesBar(allCountiesRef, (id) => {
+      const c = allCountiesRef.find(cc => cc.id === id);
+      if (c) openCountyPanel(c);
+    });
+  });
+
+  document.getElementById('panel-share-btn')?.addEventListener('click', async () => {
+    const url = `${window.location.origin}${window.location.pathname}#county-${county.id}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      showToast('Link copied to clipboard!');
+    } catch {
+      showToast('Could not copy link');
+    }
+  });
+
+  panelEl.querySelectorAll('[data-nearby-id]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = parseInt(btn.dataset.nearbyId, 10);
+      const c = allCountiesRef.find(cc => cc.id === id);
+      if (c && onNavigateCallback) onNavigateCallback(c);
+    });
+  });
+}
+
+return { initInfoPanel, openCountyPanel, closePanel };
+})();
+
+/* ===== map.js ===== */
+PC.map = (function() {
+/**
+ * map.js — Interactive SVG map: hover/click states, zoom & pan, tooltips,
+ * "dim others on select" behavior, and random-county selection.
+ */
+
+const { clamp } = PC.utils;
+let svgRoot = null;
+let mapContainer = null;
+let tooltipEl = null;
+let allCounties = [];
+let onCountySelect = null;
+let activeCountyId = null;
+
+// Zoom/pan state
+let scale = 1;
+let translateX = 0;
+let translateY = 0;
+let isPanning = false;
+let panStartX = 0, panStartY = 0;
+const MIN_SCALE = 0.8;
+const MAX_SCALE = 3.5;
+
+async function initMap(svgMarkup, counties, onSelectCallback) {
+  mapContainer = document.getElementById('map-container');
+  tooltipEl = document.getElementById('map-tooltip');
+  allCounties = counties;
+  onCountySelect = onSelectCallback;
+
+  mapContainer.innerHTML = svgMarkup;
+  svgRoot = mapContainer.querySelector('svg');
+
+  attachCountyHandlers();
+  attachZoomPanHandlers();
+  attachMapControlButtons();
+
+  return svgRoot;
+}
+
+function attachCountyHandlers() {
+  const counties = svgRoot.querySelectorAll('.county');
+
+  counties.forEach(path => {
+    path.setAttribute('tabindex', '0');
+    path.setAttribute('role', 'button');
+    const name = path.dataset.name || 'County';
+    path.setAttribute('aria-label', `${name} county — click for details`);
+
+    path.addEventListener('mouseenter', (e) => handleHoverStart(e, path));
+    path.addEventListener('mousemove', (e) => moveTooltip(e));
+    path.addEventListener('mouseleave', () => handleHoverEnd(path));
+
+    path.addEventListener('click', () => selectCounty(path));
+    path.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        selectCounty(path);
+      }
+    });
+
+    path.addEventListener('focus', (e) => handleHoverStart(e, path, true));
+    path.addEventListener('blur', () => handleHoverEnd(path));
+  });
+}
+
+function handleHoverStart(e, path, isFocus = false) {
+  path.classList.add('is-hovered');
+  const name = path.dataset.name;
+  if (tooltipEl) {
+    tooltipEl.textContent = `${name} County`;
+    tooltipEl.classList.add('is-visible');
+    if (!isFocus) moveTooltip(e);
+    else positionTooltipNearElement(path);
+  }
+}
+
+function handleHoverEnd(path) {
+  path.classList.remove('is-hovered');
+  tooltipEl?.classList.remove('is-visible');
+}
+
+function moveTooltip(e) {
+  if (!tooltipEl) return;
+  const offset = 16;
+  tooltipEl.style.left = `${e.clientX + offset}px`;
+  tooltipEl.style.top = `${e.clientY + offset}px`;
+}
+
+function positionTooltipNearElement(path) {
+  const rect = path.getBoundingClientRect();
+  tooltipEl.style.left = `${rect.left + rect.width / 2}px`;
+  tooltipEl.style.top = `${rect.top - 36}px`;
+}
+
+/**
+ * Select a county: pop animation, dim others, fire callback to open panel.
+ */
+function selectCounty(pathOrId) {
+  let path;
+  if (typeof pathOrId === 'string' || typeof pathOrId === 'number') {
+    path = svgRoot.querySelector(`.county[data-id="${pathOrId}"]`);
+  } else {
+    path = pathOrId;
+  }
+  if (!path) return;
+
+  const id = parseInt(path.dataset.id, 10);
+  activeCountyId = id;
+
+  const allPaths = svgRoot.querySelectorAll('.county');
+  allPaths.forEach(p => {
+    p.classList.remove('is-active', 'is-dimmed', 'is-searched');
+    if (p === path) {
+      p.classList.add('is-active');
+    } else {
+      p.classList.add('is-dimmed');
+    }
+  });
+
+  // bring active to front
+  path.parentNode.appendChild(path);
+
+  const county = allCounties.find(c => c.id === id);
+  if (county && onCountySelect) {
+    onCountySelect(county);
+  }
+}
+
+/**
+ * Clear the dim/active state (called when panel closes).
+ */
+function clearSelection() {
+  if (!svgRoot) return;
+  svgRoot.querySelectorAll('.county').forEach(p => {
+    p.classList.remove('is-active', 'is-dimmed');
+  });
+  activeCountyId = null;
+}
+
+/**
+ * Highlight a county temporarily for search results (gold glow), without dimming others.
+ */
+function highlightSearchResult(countyId) {
+  if (!svgRoot) return;
+  svgRoot.querySelectorAll('.county').forEach(p => p.classList.remove('is-searched'));
+  const path = svgRoot.querySelector(`.county[data-id="${countyId}"]`);
+  if (path) {
+    path.classList.add('is-searched');
+    setTimeout(() => path.classList.remove('is-searched'), 2200);
+    zoomToCounty(countyId);
+  }
+}
+
+/**
+ * Select a uniformly random county — used by the "Random County" button.
+ */
+function selectRandomCounty() {
+  if (!allCounties.length) return;
+  const random = allCounties[Math.floor(Math.random() * allCounties.length)];
+  selectCounty(random.id);
+  zoomToCounty(random.id);
+}
+
+/* ===================== Zoom & Pan ===================== */
+
+function attachZoomPanHandlers() {
+  mapContainer.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.1 : 0.1;
+    setScale(scale + delta);
+  }, { passive: false });
+
+  mapContainer.addEventListener('mousedown', (e) => {
+    if (e.target.closest('.map-ctrl-btn')) return;
+    isPanning = true;
+    panStartX = e.clientX - translateX;
+    panStartY = e.clientY - translateY;
+    mapContainer.style.cursor = 'grabbing';
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isPanning) return;
+    translateX = e.clientX - panStartX;
+    translateY = e.clientY - panStartY;
+    applyTransform();
+  });
+
+  window.addEventListener('mouseup', () => {
+    isPanning = false;
+    mapContainer.style.cursor = 'grab';
+  });
+
+  // Touch support for pan
+  let lastTouchDist = null;
+  mapContainer.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      isPanning = true;
+      panStartX = e.touches[0].clientX - translateX;
+      panStartY = e.touches[0].clientY - translateY;
+    } else if (e.touches.length === 2) {
+      lastTouchDist = getTouchDistance(e.touches);
+    }
+  }, { passive: true });
+
+  mapContainer.addEventListener('touchmove', (e) => {
+    if (e.touches.length === 1 && isPanning) {
+      translateX = e.touches[0].clientX - panStartX;
+      translateY = e.touches[0].clientY - panStartY;
+      applyTransform();
+    } else if (e.touches.length === 2) {
+      const dist = getTouchDistance(e.touches);
+      if (lastTouchDist) {
+        const delta = (dist - lastTouchDist) / 200;
+        setScale(scale + delta);
+      }
+      lastTouchDist = dist;
+    }
+  }, { passive: true });
+
+  mapContainer.addEventListener('touchend', () => {
+    isPanning = false;
+    lastTouchDist = null;
+  });
+}
+
+function getTouchDistance(touches) {
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+function setScale(newScale) {
+  scale = clamp(newScale, MIN_SCALE, MAX_SCALE);
+  applyTransform();
+}
+
+function applyTransform() {
+  if (!svgRoot) return;
+  svgRoot.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+}
+
+function resetView() {
+  scale = 1;
+  translateX = 0;
+  translateY = 0;
+  applyTransform();
+}
+
+function zoomToCounty(countyId) {
+  const path = svgRoot.querySelector(`.county[data-id="${countyId}"]`);
+  if (!path) return;
+
+  const bbox = path.getBBox();
+  const viewBox = svgRoot.viewBox.baseVal;
+  const cx = bbox.x + bbox.width / 2;
+  const cy = bbox.y + bbox.height / 2;
+
+  const containerRect = mapContainer.getBoundingClientRect();
+  const targetScale = clamp(2.2, MIN_SCALE, MAX_SCALE);
+
+  // Calculate translation to center the county
+  const svgCenterX = viewBox.width / 2;
+  const svgCenterY = viewBox.height / 2;
+  const scaleFactor = containerRect.width / viewBox.width;
+
+  translateX = (svgCenterX - cx) * scaleFactor * targetScale * 0.5;
+  translateY = (svgCenterY - cy) * scaleFactor * targetScale * 0.5;
+  scale = targetScale;
+
+  applyTransform();
+}
+
+function attachMapControlButtons() {
+  document.getElementById('zoom-in-btn')?.addEventListener('click', () => setScale(scale + 0.3));
+  document.getElementById('zoom-out-btn')?.addEventListener('click', () => setScale(scale - 0.3));
+  document.getElementById('zoom-reset-btn')?.addEventListener('click', resetView);
+  document.getElementById('random-county-btn')?.addEventListener('click', selectRandomCounty);
+}
+
+function getSvgRoot() {
+  return svgRoot;
+}
+
+return { initMap, selectCounty, clearSelection, highlightSearchResult, selectRandomCounty, resetView, getSvgRoot };
+})();
+
+/* ===== search.js ===== */
+PC.search = (function() {
+/**
+ * search.js — Live search with autocomplete, keyboard navigation, and recent searches.
+ */
+
+const { debounce, fuzzyMatch, escapeHtml } = PC.utils;
+const { getRecentSearches, addRecentSearch } = PC.storage;
+let inputEl, dropdownEl, clearBtn;
+let allCounties = [];
+let onSelectCallback = null;
+let focusedIndex = -1;
+let currentResults = [];
+
+function initSearch(counties, onSelect) {
+  allCounties = counties;
+  onSelectCallback = onSelect;
+
+  inputEl = document.getElementById('search-input');
+  dropdownEl = document.getElementById('search-dropdown');
+  clearBtn = document.getElementById('search-clear');
+
+  if (!inputEl) return;
+
+  const debouncedSearch = debounce(handleInput, 150);
+  inputEl.addEventListener('input', debouncedSearch);
+  inputEl.addEventListener('focus', () => {
+    if (inputEl.value.trim() === '') {
+      showRecentSearches();
+    } else {
+      handleInput();
+    }
+  });
+
+  inputEl.addEventListener('keydown', handleKeydown);
+
+  clearBtn?.addEventListener('click', () => {
+    inputEl.value = '';
+    closeDropdown();
+    inputEl.focus();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#search-wrapper')) {
+      closeDropdown();
+    }
+  });
+}
+
+function handleInput() {
+  const query = inputEl.value.trim();
+
+  if (query === '') {
+    showRecentSearches();
+    return;
+  }
+
+  const results = allCounties
+    .filter(c =>
+      fuzzyMatch(query, c.name) ||
+      fuzzyMatch(query, c.capital) ||
+      c.tribes.some(t => fuzzyMatch(query, t))
+    )
+    .sort((a, b) => {
+      // exact prefix matches first
+      const aStarts = a.name.toLowerCase().startsWith(query.toLowerCase());
+      const bStarts = b.name.toLowerCase().startsWith(query.toLowerCase());
+      if (aStarts && !bStarts) return -1;
+      if (!aStarts && bStarts) return 1;
+      return a.name.localeCompare(b.name);
+    })
+    .slice(0, 8);
+
+  currentResults = results;
+  focusedIndex = -1;
+  renderResults(results, query);
+}
+
+function renderResults(results, query) {
+  if (results.length === 0) {
+    dropdownEl.innerHTML = `
+      <div style="padding: var(--space-6); text-align:center; color: var(--clr-text-muted); font-size: var(--text-sm);">
+        No counties found for "${escapeHtml(query)}"
+      </div>
+    `;
+    openDropdown();
+    return;
+  }
+
+  dropdownEl.innerHTML = `
+    <div class="search-dropdown-section">Counties (${results.length})</div>
+    ${results.map((c, i) => `
+      <div class="search-result-item" data-index="${i}" data-county-id="${c.id}">
+        <div class="search-result-item__number">${c.id}</div>
+        <div class="search-result-item__info">
+          <div class="search-result-item__name">${highlightMatch(c.name, query)}</div>
+          <div class="search-result-item__capital">${escapeHtml(c.capital)} · ${escapeHtml(c.population)} people</div>
+        </div>
+      </div>
+    `).join('')}
+  `;
+
+  attachResultHandlers();
+  openDropdown();
+}
+
+function highlightMatch(text, query) {
+  const idx = text.toLowerCase().indexOf(query.toLowerCase());
+  if (idx === -1) return escapeHtml(text);
+  const before = escapeHtml(text.slice(0, idx));
+  const match = escapeHtml(text.slice(idx, idx + query.length));
+  const after = escapeHtml(text.slice(idx + query.length));
+  return `${before}<strong style="color:var(--clr-primary)">${match}</strong>${after}`;
+}
+
+function showRecentSearches() {
+  const recent = getRecentSearches();
+  if (recent.length === 0) {
+    closeDropdown();
+    return;
+  }
+
+  dropdownEl.innerHTML = `
+    <div class="search-dropdown-section">Recent Searches</div>
+    ${recent.map((q, i) => `
+      <div class="search-result-item" data-recent-index="${i}">
+        <div class="search-result-item__number" style="background:var(--clr-text-muted);">🕒</div>
+        <div class="search-result-item__info">
+          <div class="search-result-item__name">${escapeHtml(q)}</div>
+        </div>
+      </div>
+    `).join('')}
+  `;
+
+  dropdownEl.querySelectorAll('[data-recent-index]').forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = parseInt(el.dataset.recentIndex, 10);
+      inputEl.value = recent[idx];
+      handleInput();
+    });
+  });
+
+  currentResults = [];
+  openDropdown();
+}
+
+function attachResultHandlers() {
+  dropdownEl.querySelectorAll('.search-result-item[data-county-id]').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = parseInt(el.dataset.countyId, 10);
+      selectResult(id);
+    });
+  });
+}
+
+function selectResult(countyId) {
+  const county = allCounties.find(c => c.id === countyId);
+  if (!county) return;
+
+  addRecentSearch(county.name);
+  inputEl.value = county.name;
+  closeDropdown();
+
+  if (onSelectCallback) onSelectCallback(county);
+}
+
+function handleKeydown(e) {
+  const items = dropdownEl.querySelectorAll('.search-result-item');
+  if (items.length === 0) return;
+
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    focusedIndex = Math.min(focusedIndex + 1, items.length - 1);
+    updateFocusedItem(items);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    focusedIndex = Math.max(focusedIndex - 1, 0);
+    updateFocusedItem(items);
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    if (focusedIndex >= 0 && currentResults[focusedIndex]) {
+      selectResult(currentResults[focusedIndex].id);
+    } else if (currentResults.length > 0) {
+      selectResult(currentResults[0].id);
+    }
+  } else if (e.key === 'Escape') {
+    closeDropdown();
+    inputEl.blur();
+  }
+}
+
+function updateFocusedItem(items) {
+  items.forEach((item, i) => {
+    item.classList.toggle('is-focused', i === focusedIndex);
+    if (i === focusedIndex) {
+      item.scrollIntoView({ block: 'nearest' });
+    }
+  });
+}
+
+function openDropdown() {
+  dropdownEl.classList.add('is-open');
+}
+
+function closeDropdown() {
+  dropdownEl.classList.remove('is-open');
+  focusedIndex = -1;
+}
+
+return { initSearch };
+})();
+
+/* ===== quiz.js ===== */
+PC.quiz = (function() {
+/**
+ * quiz.js — "Test your Kenya knowledge" quiz mode.
+ * Generates multiple-choice questions about counties (capitals, population, etc.)
+ */
+
+const { shuffle, randomItem, escapeHtml, formatNumber } = PC.utils;
+const { getQuizBestScore, setQuizBestScore } = PC.storage;
+const { showToast } = PC.ui;
+let allCounties = [];
+let questions = [];
+let currentIndex = 0;
+let score = 0;
+const TOTAL_QUESTIONS = 10;
+
+function initQuiz(counties) {
+  allCounties = counties;
+  const startBtn = document.getElementById('quiz-start-btn');
+  startBtn?.addEventListener('click', startQuiz);
+}
+
+function generateQuestions() {
+  const types = ['capital', 'population', 'governor'];
+  const pool = shuffle(allCounties).slice(0, TOTAL_QUESTIONS);
+
+  return pool.map(county => {
+    const type = randomItem(types);
+    return buildQuestion(county, type);
+  });
+}
+
+function buildQuestion(county, type) {
+  const distractors = shuffle(allCounties.filter(c => c.id !== county.id)).slice(0, 3);
+
+  if (type === 'capital') {
+    const options = shuffle([county.capital, ...distractors.map(d => d.capital)]);
+    return {
+      question: `What is the capital of ${county.name} County?`,
+      options,
+      answer: county.capital
+    };
+  }
+
+  if (type === 'governor') {
+    const options = shuffle([county.governor, ...distractors.map(d => d.governor)]);
+    return {
+      question: `Who is the governor of ${county.name} County?`,
+      options,
+      answer: county.governor
+    };
+  }
+
+  // population — ask which county has the given capital
+  const options = shuffle([county.name, ...distractors.map(d => d.name)]);
+  return {
+    question: `Which county has ${county.capital} as its capital?`,
+    options,
+    answer: county.name
+  };
+}
+
+function startQuiz() {
+  questions = generateQuestions();
+  currentIndex = 0;
+  score = 0;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const container = document.getElementById('quiz-container');
+  if (!container || currentIndex >= questions.length) {
+    return endQuiz();
+  }
+
+  const q = questions[currentIndex];
+  const progressPct = ((currentIndex) / questions.length) * 100;
+
+  container.innerHTML = `
+    <div class="quiz-progress">
+      <span style="font-size:var(--text-sm); color:var(--clr-text-muted); white-space:nowrap;">
+        ${currentIndex + 1} / ${questions.length}
+      </span>
+      <div class="quiz-progress__bar">
+        <div class="quiz-progress__fill" style="width:${progressPct}%"></div>
+      </div>
+      <span style="font-size:var(--text-sm); color:var(--clr-primary); font-weight:600; white-space:nowrap;">
+        ${score} pts
+      </span>
+    </div>
+    <div class="quiz-question">${escapeHtml(q.question)}</div>
+    <div class="quiz-options">
+      ${q.options.map(opt => `
+        <button class="quiz-option" data-answer="${escapeHtml(opt)}">${escapeHtml(opt)}</button>
+      `).join('')}
+    </div>
+  `;
+
+  container.querySelectorAll('.quiz-option').forEach(btn => {
+    btn.addEventListener('click', () => handleAnswer(btn, q));
+  });
+}
+
+function handleAnswer(btn, question) {
+  const allOptions = document.querySelectorAll('.quiz-option');
+  allOptions.forEach(b => b.disabled = true);
+
+  const isCorrect = btn.dataset.answer === question.answer;
+  if (isCorrect) {
+    btn.classList.add('is-correct');
+    score += 10;
+  } else {
+    btn.classList.add('is-wrong');
+    allOptions.forEach(b => {
+      if (b.dataset.answer === question.answer) b.classList.add('is-correct');
+    });
+  }
+
+  setTimeout(() => {
+    currentIndex++;
+    renderQuestion();
+  }, 1200);
+}
+
+function endQuiz() {
+  const container = document.getElementById('quiz-container');
+  if (!container) return;
+
+  const isNewRecord = setQuizBestScore(score);
+  const best = getQuizBestScore();
+  const pct = Math.round((score / (TOTAL_QUESTIONS * 10)) * 100);
+
+  let message = 'Keep exploring Kenya to learn more!';
+  if (pct >= 90) message = 'Outstanding! You truly know Kenya.';
+  else if (pct >= 70) message = 'Great job! You know your counties well.';
+  else if (pct >= 50) message = 'Good effort! A bit more exploring will help.';
+
+  container.innerHTML = `
+    <div style="text-align:center;">
+      <div style="font-size:3rem; margin-bottom:var(--space-4);">${pct >= 70 ? '🏆' : '🎓'}</div>
+      <h3 class="quiz-question">You scored ${score} / ${TOTAL_QUESTIONS * 10}</h3>
+      <p style="color:var(--clr-text-secondary); margin-bottom:var(--space-2);">${message}</p>
+      <p style="color:var(--clr-text-muted); font-size:var(--text-sm); margin-bottom:var(--space-8);">
+        Best score: ${best} pts ${isNewRecord ? '🎉 New record!' : ''}
+      </p>
+      <button class="btn btn--primary" id="quiz-restart-btn">Play Again</button>
+    </div>
+  `;
+
+  document.getElementById('quiz-restart-btn')?.addEventListener('click', startQuiz);
+
+  if (isNewRecord) showToast('New high score! 🎉');
+}
+
+return { initQuiz };
+})();
+
+/* ===== app.js ===== */
+(function() {
+/**
+ * app.js — Application entry point. Loads data, initializes all modules,
+ * and wires up cross-module interactions (e.g. search → map → panel).
+ */
+
+const { loadCounties, loadMapSVG, computeStatistics } = PC.api;
+const { initMap, selectCounty, highlightSearchResult, clearSelection } = PC.map;
+const { initSearch } = PC.search;
+const { initInfoPanel, openCountyPanel, closePanel } = PC.modal;
+const {
+  initToasts, showToast, initScrollReveal, initNavbarScroll,
+  initSmoothScrollLinks, initThemeToggle, initFullscreenToggle,
+  renderStatistics, renderPopulationChart, renderFavoritesBar, initShortcutsModal
+} = PC.ui;
+const { initQuiz } = PC.quiz;
+const { attachRippleEffect } = PC.animation;
+const { addRecentSearch } = PC.storage;
+async function main() {
+  initToasts();
+  initNavbarScroll();
+  initSmoothScrollLinks();
+  initThemeToggle();
+  initFullscreenToggle();
+  initShortcutsModal();
+
+  let counties = [];
+
+  try {
+    const [countyData, svgMarkup] = await Promise.all([
+      loadCounties(),
+      loadMapSVG()
+    ]);
+    counties = countyData;
+
+    await initMap(svgMarkup, counties, handleCountySelected);
+
+    initSearch(counties, (county) => {
+      addRecentSearch(county.name);
+      highlightSearchResult(county.id);
+      selectCounty(county.id);
+    });
+
+    initInfoPanel(counties, (county) => {
+      // navigate to a nearby county from within the panel
+      selectCounty(county.id);
+    });
+
+    renderStatistics(computeStatistics(counties));
+    renderPopulationChart(counties);
+    renderFavoritesBar(counties, (id) => {
+      const c = counties.find(cc => cc.id === id);
+      if (c) {
+        selectCounty(c.id);
+        highlightSearchResult(c.id);
+      }
+    });
+
+    initQuiz(counties);
+
+    document.addEventListener('panel:closed', clearSelection);
+
+    handleDeepLink(counties);
+
+  } catch (err) {
+    console.error('[app] Initialization failed:', err);
+    showErrorState();
+    return;
+  }
+
+  attachRippleEffect('.btn');
+  initScrollReveal();
+  attachExploreButton();
+  attachKeyboardShortcuts(counties);
+
+  showToast('Welcome to Project Culture 🇰🇪');
+}
+
+function handleCountySelected(county) {
+  openCountyPanel(county);
+}
+
+function attachExploreButton() {
+  const exploreBtn = document.getElementById('explore-btn');
+  exploreBtn?.addEventListener('click', () => {
+    document.getElementById('map-section')?.scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+function attachKeyboardShortcuts(counties) {
+  document.addEventListener('keydown', (e) => {
+    const tag = e.target.tagName ? e.target.tagName.toLowerCase() : '';
+    if (tag === 'input' || tag === 'textarea') return;
+
+    if (e.key === '/') {
+      e.preventDefault();
+      document.getElementById('search-input')?.focus();
+    }
+
+    if (e.key === 'r' || e.key === 'R') {
+      document.getElementById('random-county-btn')?.click();
+    }
+
+    if (e.key === 'd' || e.key === 'D') {
+      document.getElementById('theme-toggle')?.click();
+    }
+  });
+}
+
+function handleDeepLink(counties) {
+  const hash = window.location.hash;
+  const match = hash.match(/#county-(\d+)/);
+  if (match) {
+    const id = parseInt(match[1], 10);
+    const county = counties.find(c => c.id === id);
+    if (county) {
+      setTimeout(() => {
+        document.getElementById('map-section')?.scrollIntoView({ behavior: 'smooth' });
+        selectCounty(id);
+      }, 500);
+    }
+  }
+}
+
+function showErrorState() {
+  const mapContainer = document.getElementById('map-container');
+  if (mapContainer) {
+    mapContainer.innerHTML = `
+      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding: var(--space-8); gap: var(--space-3);">
+        <div style="font-size:2.5rem;">⚠️</div>
+        <p style="color:var(--clr-text-secondary);">We couldn't load the Kenya map data.<br>Please check your connection and refresh the page.</p>
+        <button class="btn btn--primary" onclick="location.reload()">Retry</button>
+      </div>
+    `;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', main);
+
+})();
+
+</script>
+</body>
+</html>

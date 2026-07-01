@@ -1,0 +1,114 @@
+/* css/responsive.css — Breakpoints and responsive overrides */
+
+/* === Tablet (≤1024px) === */
+@media (max-width: 1024px) {
+  :root { --panel-width: 380px; }
+
+  #stats-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .quiz-options {
+    grid-template-columns: 1fr;
+  }
+
+  .external-links {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* === Mobile Landscape / Small Tablet (≤768px) === */
+@media (max-width: 768px) {
+  :root {
+    --panel-width: 100%;
+    --space-12: 32px;
+    --space-16: 40px;
+    --space-20: 48px;
+  }
+
+  .hero__title { font-size: clamp(2.25rem, 12vw, 3.25rem); }
+  .hero__subtitle { font-size: clamp(1.1rem, 5vw, 1.5rem); }
+  .hero__description { font-size: var(--text-base); padding: 0 var(--space-4); }
+
+  .hero__actions {
+    flex-direction: column;
+    width: 100%;
+    padding: 0 var(--space-6);
+  }
+
+  .hero__actions .btn { width: 100%; justify-content: center; }
+
+  #search-wrapper { padding: 0 var(--space-4); }
+
+  #stats-bar {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 var(--space-4);
+  }
+
+  .panel-grid { grid-template-columns: 1fr; }
+
+  #info-panel {
+    width: 100%;
+  }
+
+  .panel-header__name { font-size: var(--text-3xl); }
+
+  #map-stage { max-width: 100%; padding: 0 var(--space-2); }
+
+  #navbar { padding: 0 var(--space-4); }
+  .navbar__brand { font-size: var(--text-lg); }
+
+  #map-legend {
+    display: none;
+  }
+
+  .quiz-card { padding: var(--space-6); }
+  .quiz-question { font-size: var(--text-xl); }
+
+  #scroll-top {
+    bottom: var(--space-4);
+    right: var(--space-4);
+  }
+}
+
+/* === Mobile Portrait (≤480px) === */
+@media (max-width: 480px) {
+  #stats-bar { grid-template-columns: repeat(2, 1fr); gap: var(--space-3); }
+  .stat-card { padding: var(--space-4); }
+  .stat-card__value { font-size: var(--text-xl); }
+
+  .navbar__actions .btn--secondary span.label-text { display: none; }
+
+  #map-controls {
+    bottom: var(--space-2);
+    right: var(--space-2);
+  }
+
+  .map-ctrl-btn { width: 36px; height: 36px; font-size: 0.9rem; }
+
+  .panel-body { padding: var(--space-4); }
+  .panel-header { padding: var(--space-6) var(--space-4) var(--space-3); }
+}
+
+/* === Landscape orientation specific === */
+@media (max-height: 500px) and (orientation: landscape) {
+  #hero { min-height: auto; padding: var(--space-16) var(--space-6); }
+  #map-section { min-height: auto; }
+}
+
+/* === High contrast mode support === */
+@media (prefers-contrast: high) {
+  .glass-card, .stat-card, #info-panel, #search-dropdown {
+    border-width: 2px;
+    border-color: var(--clr-text-primary);
+  }
+
+  .county {
+    stroke-width: 2 !important;
+  }
+}
+
+/* === Print === */
+@media print {
+  #navbar, #map-controls, #scroll-top, #info-panel, .btn { display: none !important; }
+}
