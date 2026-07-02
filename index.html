@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Project Culture — Explore Kenya's 47 Counties</title>
+<meta name="description" content="An interactive explorer showcasing the beauty, culture, geography, history, and diversity of Kenya's 47 counties.">
+
+<link rel="stylesheet" href="css/reset.css">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/themes.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ============== NAVBAR ============== -->
+  <nav id="navbar" aria-label="Primary">
+    <div class="navbar__brand">Project <span>Culture</span></div>
+    <div class="navbar__actions">
+      <button class="btn btn--secondary btn--icon" id="shortcuts-btn" aria-label="Keyboard shortcuts" title="Keyboard shortcuts (?)">⌨️</button>
+      <button class="btn btn--secondary btn--icon" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode (D)">
+        <span class="theme-toggle__icon-light">🌙</span>
+        <span class="theme-toggle__icon-dark">☀️</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ============== HERO ============== -->
+  <section id="hero">
+    <div class="hero__eyebrow">🇰🇪 47 Counties · One Nation</div>
+    <h1 class="hero__title">Project Culture</h1>
+    <p class="hero__subtitle">Explore Kenya. Discover Its Culture.</p>
+    <p class="hero__description">
+      An interactive explorer showcasing the beauty, culture, geography, history,
+      and diversity of Kenya's 47 counties.
+    </p>
+    <div class="hero__actions">
+      <button class="btn btn--primary" id="explore-btn">🗺️ Explore Kenya</button>
+    </div>
+
+    <div id="search-wrapper" style="margin-top: var(--space-10);">
+      <div class="search-box">
+        <span class="search-box__icon">🔍</span>
+        <input
+          type="text"
+          id="search-input"
+          class="search-box__input"
+          placeholder="Search any county..."
+          autocomplete="off"
+          aria-label="Search for a Kenyan county"
+        >
+        <button class="search-box__clear" id="search-clear" aria-label="Clear search">✕</button>
+      </div>
+      <div id="search-dropdown" role="listbox" aria-label="Search results"></div>
+    </div>
+  </section>
+
+  <!-- ============== STATISTICS DASHBOARD ============== -->
+  <section style="padding: var(--space-12) var(--space-6); display:flex; flex-direction:column; align-items:center; gap: var(--space-8);">
+    <div class="map-section__header reveal">
+      <div class="section-label">By the Numbers</div>
+      <h2 class="section-title">Kenya at a Glance</h2>
+      <p class="section-subtitle">Key statistics across all 47 counties</p>
+    </div>
+    <div id="stats-bar"></div>
+
+    <div class="glass-card reveal" style="width:100%; max-width:900px; padding: var(--space-6);">
+      <div class="panel-section__title" style="border:none; margin-bottom: var(--space-4);">📊 Top 10 Most Populous Counties</div>
+      <canvas id="population-chart" style="width:100%; height:280px;"></canvas>
+    </div>
+  </section>
+
+  <!-- ============== MAP SECTION ============== -->
+  <section id="map-section">
+    <div class="map-section__header reveal">
+      <div class="section-label">Interactive Map</div>
+      <h2 class="section-title">Discover Every County</h2>
+      <p class="section-subtitle">Hover to preview, click to explore. Scroll or pinch to zoom, drag to pan.</p>
+    </div>
+
+    <div id="map-stage">
+      <div id="map-container" role="application" aria-label="Interactive map of Kenya"></div>
+
+      <div id="map-controls">
+        <button class="map-ctrl-btn" id="zoom-in-btn" aria-label="Zoom in" title="Zoom in">＋</button>
+        <button class="map-ctrl-btn" id="zoom-out-btn" aria-label="Zoom out" title="Zoom out">－</button>
+        <button class="map-ctrl-btn" id="zoom-reset-btn" aria-label="Reset view" title="Reset view">⟲</button>
+        <button class="map-ctrl-btn" id="random-county-btn" aria-label="Random county" title="Random county (R)">🎲</button>
+        <button class="map-ctrl-btn" id="fullscreen-toggle" aria-label="Fullscreen" title="Fullscreen">⛶</button>
+      </div>
+
+      <div id="map-legend">
+        <div class="legend__title">Legend</div>
+        <div class="legend__item"><span class="legend__dot" style="background:#2E7D32;"></span> Click any county</div>
+        <div class="legend__item"><span class="legend__dot" style="background:#FFB300;"></span> Search result</div>
+      </div>
+    </div>
+
+    <div style="text-align:center; max-width:600px;">
+      <p class="section-subtitle" style="font-size:var(--text-sm);">⭐ Your Favorites</p>
+    </div>
+    <div id="favorites-bar"></div>
+  </section>
+
+  <!-- ============== QUIZ SECTION ============== -->
+  <section id="quiz-section">
+    <div class="map-section__header reveal">
+      <div class="section-label">Test Yourself</div>
+      <h2 class="section-title">Kenya Counties Quiz</h2>
+      <p class="section-subtitle">10 questions on capitals, governors, and more. Can you score 100?</p>
+    </div>
+
+    <div class="quiz-card reveal">
+      <div id="quiz-container">
+        <div style="text-align:center;">
+          <div style="font-size:3rem; margin-bottom:var(--space-4);">🧠</div>
+          <p style="color:var(--clr-text-secondary); margin-bottom:var(--space-8);">
+            Ready to put your Kenya knowledge to the test?
+          </p>
+          <button class="btn btn--primary" id="quiz-start-btn">Start Quiz</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== FOOTER ============== -->
+  <footer>
+    <p>Project Culture — An independent educational explorer of Kenya's 47 counties.</p>
+    <p style="margin-top: var(--space-2);">Data compiled for illustrative purposes. Always verify with official county government sources.</p>
+  </footer>
+
+</div>
+
+<!-- ============== OVERLAYS / FLOATING UI ============== -->
+<div id="overlay"></div>
+<aside id="info-panel" aria-label="County details panel"></aside>
+<div id="map-tooltip" role="tooltip"></div>
+<div id="toast-container" aria-live="polite"></div>
+
+<button id="scroll-top" class="btn btn--secondary btn--icon-lg" aria-label="Scroll to top">↑</button>
+
+<!-- ============== KEYBOARD SHORTCUTS MODAL ============== -->
+<div id="shortcuts-modal">
+  <div class="glass-card" style="width:100%; max-width:440px; padding: var(--space-8);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-6);">
+      <h3 style="font-family:var(--font-display); font-size:var(--text-2xl); font-weight:700;">Keyboard Shortcuts</h3>
+      <button class="panel-header__close" id="shortcuts-close" style="position:static; background:var(--clr-bg-secondary); color:var(--clr-text-primary); border-color:var(--clr-border);" aria-label="Close shortcuts">✕</button>
+    </div>
+    <div class="shortcuts-grid">
+      <div class="shortcut-item"><span>Focus search</span><kbd>/</kbd></div>
+      <div class="shortcut-item"><span>Random county</span><kbd>R</kbd></div>
+      <div class="shortcut-item"><span>Toggle dark mode</span><kbd>D</kbd></div>
+      <div class="shortcut-item"><span>Close panel</span><kbd>Esc</kbd></div>
+      <div class="shortcut-item"><span>Show shortcuts</span><kbd>?</kbd></div>
+      <div class="shortcut-item"><span>Navigate results</span><kbd>↑ ↓</kbd></div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
