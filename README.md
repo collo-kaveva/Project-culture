@@ -2,7 +2,7 @@
 
 A production-quality, framework-free (HTML5 + CSS3 + Vanilla JS ES6+) interactive web application that showcases all 47 counties of Kenya through an immersive, modern, Apple/Stripe-inspired interface.
 
-## ✨ Features
+##  Features
 
 - **Interactive SVG map** of all 47 counties — hover, click, search-highlight, zoom & pan (mouse, wheel, touch/pinch)
 - **Gentle floating animation** on the whole map (paused on hover, respects `prefers-reduced-motion`)
