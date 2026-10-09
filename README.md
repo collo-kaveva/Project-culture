@@ -62,7 +62,7 @@ All colors, spacing, typography, and shadows are defined as CSS custom propertie
 
 The map is a stylized, simplified representation of Kenya's 47 counties laid out by approximate relative geography (each county is an independent `<path>` with a `data-id` and `data-name`). It is built for interactivity and clarity rather than cartographic precision — for production use, consider swapping in a geographically accurate GeoJSON-to-SVG export.
 8
-## Keyboard shortcuts
+## Keyboard shortcut
 
 | Key | Action |
 |---|---|
