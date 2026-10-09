@@ -1,4 +1,4 @@
-# Project Culture — Interactive Kenya Counties Explorer
+# Project Culture 
 
 A production-quality, framework-free (HTML5 + CSS3 + Vanilla JS ES6+) interactive web application that showcases all 47 counties of Kenya through an immersive, modern, Apple/Stripe-inspired interface.
 
