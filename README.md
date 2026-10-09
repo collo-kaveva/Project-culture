@@ -73,7 +73,7 @@ The map is a stylized, simplified representation of Kenya's 47 counties laid out
 | `Esc` | Close panel / modal |
 | `↑` `↓` `Enter` | Navigate search results |
 
-## 📝 Notes
+##  Notes
 
 - County data lives exclusively in `data/counties.json` per the project's data-separation requirement — nothing is hardcoded in JavaScript.
 - No external UI frameworks (React/Vue/Angular/Bootstrap/Tailwind) are used; all styling is hand-authored CSS3 and all interactivity is Vanilla JS ES6 modules.
