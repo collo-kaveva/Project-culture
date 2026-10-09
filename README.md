@@ -14,7 +14,7 @@ A production-quality, framework-free (HTML5 + CSS3 + Vanilla JS ES6+) interactiv
 - **Dark mode**, **fullscreen mode**, keyboard shortcuts (`/`, `R`, `D`, `?`, `Esc`)
 - Fully **responsive** (desktop → mobile, portrait & landscape) and **accessible** (ARIA labels, keyboard focus, semantic HTML, reduced-motion & high-contrast support)
 
-## 📁 Folder Structure
+## Folder Structure
 
 ```
 ProjectCulture/
@@ -45,7 +45,7 @@ ProjectCulture/
 └── assets/               — images, icons, logos, audio (placeholders)
 ```
 
-## 🚀 Running locally
+##  Running locally
 
 Because the app fetches `data/counties.json` and `svg/kenya-map.svg` via the Fetch API, it must be served over HTTP (not opened directly as a `file://` URL). From the `ProjectCulture` folder:
 
@@ -54,14 +54,14 @@ python3 -m http.server 8080
 # then open http://localhost:8080
 ```
 
-## 🎨 Design tokens
+##Design tokens
 
 All colors, spacing, typography, and shadows are defined as CSS custom properties in `css/variables.css`, making the palette and design language easy to retheme.
 
-## 🗺️ About the map
+##  About the map
 
 The map is a stylized, simplified representation of Kenya's 47 counties laid out by approximate relative geography (each county is an independent `<path>` with a `data-id` and `data-name`). It is built for interactivity and clarity rather than cartographic precision — for production use, consider swapping in a geographically accurate GeoJSON-to-SVG export.
-
+8
 ## ⌨️ Keyboard shortcuts
 
 | Key | Action |
