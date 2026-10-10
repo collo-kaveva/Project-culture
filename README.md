@@ -54,7 +54,7 @@ python3 -m http.server 8080
 # then open http://localhost:8080
 ```
 
-##Design tokens
+##Design 
 
 All colors, spacing, typography, and shadows are defined as CSS custom properties in `css/variables.css`, making the palette and design language easy to retheme.
 
