@@ -73,6 +73,4 @@ The map is a stylized, simplified representation of Kenya's 47 counties laid out
 | `Esc` | Close panel / modal |
 | `↑` `↓` `Enter` | Navigate search results |
 
-##  Notes
-
 
