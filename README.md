@@ -47,7 +47,7 @@ ProjectCulture/
 
 ##  Running locally
 
-Because the app fetches `data/counties.json` and `svg/kenya-map.svg` via the Fetch API, it must be served over HTTP (not opened directly as a `file://` URL). From the `ProjectCulture` folder:
+Because the app fetches `data/counties.json` and `svg/kenya-map.svg` via the Fetch API, it must be served over HTTP. From the `ProjectCulture` folder:
 
 ```bash
 python3 -m http.server 8080
