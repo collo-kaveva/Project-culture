@@ -58,7 +58,7 @@ python3 -m http.server 8080
 
 All colors, spacing, typography, and shadows are defined as CSS custom properties in `css/variables.css`, making the palette and design language easy to retheme.
 
-##  About the map
+##  The map
 
 The map is a stylized, simplified representation of Kenya's 47 counties laid out by approximate relative geography (each county is an independent `<path>` with a `data-id` and `data-name`). It is built for interactivity and clarity rather than cartographic precision — for production use, consider swapping in a geographically accurate GeoJSON-to-SVG export.
 8
