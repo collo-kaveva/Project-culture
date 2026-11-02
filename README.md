@@ -4,7 +4,7 @@ A production-quality, framework-free (HTML5 + CSS3 + Vanilla JS ES6+) interactiv
 
 ##  Features
 
-- **Interactive SVG map** of all 47 counties — hover, click, search-highlight, zoom & pan 
+- **Interactive SVG map** of all 47 counties — hover, click, search-highlight, zoom 
 - **Gentle floating animation** on the whole map 
 - **Sliding info-drawer** with 20+ data points per county: capital, governor, population, area, languages, tribes, economy, tourism, national parks, universities, hospitals, road network, history, fun facts, nearby counties, coordinates, and external links
 - **Live search** with fuzzy matching, autocomplete dropdown, keyboard navigation (↑ ↓ Enter Esc), and recent-search memory
